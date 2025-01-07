@@ -91,33 +91,7 @@
   margin-top: 25px;
 }
 
-button.btn {
-  padding: 12px 18px;
-  font-size: 1.1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  background-color: #00274d; 
-  color: #ffcb05; 
-}
 
-button.btn-danger {
-  background-color: #f84936;
-  color: white;
-}
-
-button.btn:hover {
-  background-color: #ffcb05; 
-  color: #00274d; 
-  opacity: 0.8;
-  transform: translateY(-2px);
-}
-
-button.btn-danger:hover {
-  opacity: 0.8;
-  transform: translateY(-2px);
-}
 
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.4);

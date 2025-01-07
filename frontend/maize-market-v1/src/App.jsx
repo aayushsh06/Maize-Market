@@ -5,6 +5,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Header from "./components/Header.jsx";
 import ProductList from "./components/ProductList.jsx";
 import AddProductModal from './components/AddProductModal.jsx';
+import Navbar from './components/Navbar.jsx';
 
 function App() {
   const formatDate = (date) => {
@@ -50,6 +51,7 @@ function App() {
   return (
     <>
       <Header toggleModal={toggleModal} numOfProducts={data.totalElements} />
+      <Navbar></Navbar>
       <main className='main'>
         <div className='container'>
           <Routes>
