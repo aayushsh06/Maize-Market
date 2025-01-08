@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { getProducts } from './api/ProductService.js';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { getProducts } from '../api/ProductService.js';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
-import Header from "./components/Header.jsx";
-import ProductList from "./components/ProductList.jsx";
-import AddProductModal from './components/AddProductModal.jsx';
-import Navbar from './components/Navbar.jsx';
+import Header from "./Header.jsx";
+import ProductList from "./ProductList.jsx";
+import AddProductModal from './AddProductModal.jsx';
+import Navbar from './Navbar.jsx';
+import Home from './Home.jsx';
 
 function App() {
   const formatDate = (date) => {
@@ -29,6 +30,7 @@ function App() {
     seller: 'EpicSeller123',
     releaseDate: formatDate(new Date())
   });
+  const location = useLocation();
 
   const getAllProducts = async (page = 0, size = 10) => {
     try {
@@ -48,14 +50,18 @@ function App() {
     setIsModalOpen(show);
   }
 
+  const shouldShowHeader = location.pathname === '/products';
+
   return (
     <>
-      <Header toggleModal={toggleModal} numOfProducts={data.totalElements} />
       <Navbar></Navbar>
+      {shouldShowHeader && <Header toggleModal={toggleModal} numOfProducts={data.totalElements} />}
+      
       <main className='main'>
         <div className='container'>
           <Routes>
-            <Route path="/" element={<Navigate to={"/products"} />} />
+            <Route path="/" element={<Navigate to={"/home"} />} />
+            <Route path="/home" element={<Home/>}/>
             <Route path="/products" element={<ProductList data={data} currentPage={currentPage} getAllProducts={getAllProducts} />} />
           </Routes>
         </div>

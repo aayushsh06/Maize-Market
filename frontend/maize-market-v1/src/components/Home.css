@@ -1,0 +1,21 @@
+.homeContainer{
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(200, 204, 205);
+    border: 5px solid black;
+    border-radius: 20px;
+
+}
+.header{
+    font-size: 100px;
+    color: #00274d;
+}
+
+.btn.enter{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 70px;
+    width: 500px;
+    height: 100px;
+}
