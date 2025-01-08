@@ -100,12 +100,12 @@ const AddProductModal = ({ isModalOpen, toggleModal, file, setFile, values, setV
                             <input type="text" name="name" required placeholder="Enter Name" value={values.name} onChange={handleInputChange} />
                         </div>
                         <div className="input-box">
-                            <div className="details">Description</div>
-                            <textarea name="description" required placeholder="Enter Description" value={values.description} onChange={(handleInputChange)} />
-                        </div>
-                        <div className="input-box">
                             <div className="details">Price</div>
                             <input type="text" name="price" required placeholder="Enter Price" value={values.price} onChange={handleInputChange} />
+                        </div>
+                        <div className="input-box">
+                            <div className="details">Description</div>
+                            <textarea name="description" required placeholder="Enter Description" value={values.description} onChange={(handleInputChange)} />
                         </div>
                         <div className="input-box">
                             <div className="details">Category</div>

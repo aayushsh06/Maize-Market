@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({toggleModal, numOfProducts}) => {
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
@@ -16,10 +16,8 @@ const Navbar = () => {
             <path d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z" />
           </svg>
         </button>
-        <button className="button">
-          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" aria-hidden="true" viewBox="0 0 24 24" strokeWidth={2} fill="none" stroke="currentColor" className="icon">
-            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinejoin="round" strokeLinecap="round" />
-          </svg>
+        <button className="button" onClick={() => toggleModal(true)}>
+          <i className = 'bi bi-plus-square'></i>
         </button>
         <button className="button">
           <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" strokeWidth={0} fill="currentColor" stroke="currentColor" className="icon">
@@ -42,7 +40,7 @@ const StyledWrapper = styled.div`
   .button-container {
     display: flex;
     background-color:#00274d;
-    width: 250px;
+    width: 50%;
     height: 40px;
     align-items: center;
     justify-content: space-around;
@@ -70,6 +68,10 @@ const StyledWrapper = styled.div`
 
   .button:hover {
     transform: translateY(-3px);
+  }
+
+  .button .bi-plus-square{
+    font-size: 20px;
   }
 
   .icon {

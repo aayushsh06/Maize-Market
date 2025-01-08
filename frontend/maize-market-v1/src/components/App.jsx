@@ -54,9 +54,8 @@ function App() {
 
   return (
     <>
-      <Navbar></Navbar>
-      {shouldShowHeader && <Header toggleModal={toggleModal} numOfProducts={data.totalElements} />}
       
+      <Navbar toggleModal={toggleModal} numOfProducts={data.totalElements}></Navbar>
       <main className='main'>
         <div className='container'>
           <Routes>

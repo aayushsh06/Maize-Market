@@ -1,6 +1,6 @@
 .modal {
   width: 90%;
-  max-width: 500px;
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
@@ -90,30 +90,18 @@
   gap: 12px;
   margin-top: 25px;
 }
-
-
+.input-box{
+  max-width : 30%;
+}
+textarea[name="description"]{
+  width: 200%;
+  height: 50px;
+}
 
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.input-box textarea[name="Description"] {
-  height: 120px;
-  width: 100%;
-  resize: vertical;
-  padding: 12px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-  background-color: #fafafa;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
-}
-
-.input-box input[type="text"][name="Description"]:focus {
-  border-color: #00274d; 
-  background-color: #f0f8ff; 
-}
 
 .modal_header i:hover {
   color: #f84936; 
@@ -163,12 +151,15 @@ dialog::backdrop {
 .file-input-wrapper {
   display: flex;
   align-items: center;
-  gap: 10px; 
+  gap: 100px; 
+  margin-bottom: 20px;
 }
 
 .image-preview img {
-  width: 100px;
-  height: 100px;
+  margin-top: 35px;
+  max-width: 175px;
+  max-height: 175px;
   object-fit: cover;
   border-radius: 6px;
 }
+
