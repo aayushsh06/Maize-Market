@@ -7,6 +7,7 @@ import ProductList from "./ProductList.jsx";
 import AddProductModal from './AddProductModal.jsx';
 import Navbar from './Navbar.jsx';
 import Home from './Home.jsx';
+import SignIn from './Login.jsx';
 
 function App() {
   const formatDate = (date) => {
@@ -62,6 +63,7 @@ function App() {
             <Route path="/" element={<Navigate to={"/home"} />} />
             <Route path="/home" element={<Home/>}/>
             <Route path="/products" element={<ProductList data={data} currentPage={currentPage} getAllProducts={getAllProducts} />} />
+            <Route path="/login" element={<SignIn/>} />
           </Routes>
         </div>
       </main>
