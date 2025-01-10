@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { UserContext } from './UserContext';
 
 const Login = () => {
+  const { name, username, setUsername } = useContext(UserContext);
+
+  const[tempUN, setUN] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+
+  const handleInputChange = (e) =>{
+    const {name, value} = e.target;
+    if(name === 'email'){
+      setEmail(value);
+    }
+    else if(name === 'username'){
+      setUN(value);
+    }
+    else{
+      setPassword(value);
+    }
+
+  }
+
+  const handleSignUp = () => {
+    
+  }
   return (
     <StyledWrapper>
       <div className="wrapper">
@@ -13,7 +37,7 @@ const Login = () => {
             <div className="flip-card__inner">
               <div className="flip-card__front">
                 <div className="title">Log in</div>
-                <form className="flip-card__form" action>
+                <form className="flip-card__form">
                   <input className="flip-card__input" name="email" placeholder="Email" type="email" />
                   <input className="flip-card__input" name="password" placeholder="Password" type="password" />
                   <button className="flip-card__btn">Let`s go!</button>
@@ -21,16 +45,16 @@ const Login = () => {
               </div>
               <div className="flip-card__back">
                 <div className="title">Sign up</div>
-                <form className="flip-card__form" action>
-                  <input className="flip-card__input" placeholder="Name" type="name" />
-                  <input className="flip-card__input" name="email" placeholder="Email" type="email" />
-                  <input className="flip-card__input" name="password" placeholder="Password" type="password" />
+                <form className="flip-card__form">
+                  <input className="flip-card__input" name="username" placeholder="Username" type="name" onChange={handleInputChange}/>
+                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange}/>
+                  <input className="flip-card__input" name="password" placeholder="Password" type="password" onChange={handleInputChange} />
                   <button className="flip-card__btn">Confirm!</button>
                 </form>
               </div>
             </div>
           </label>
-        </div>   
+        </div>
       </div>
     </StyledWrapper>
   );
