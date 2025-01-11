@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { UserContext } from './UserContext';
-import { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence } from '../api/Firebase-config.js';
+import { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut, db, ref, update } from '../api/Firebase-config.js';
 import Loader from "./Loader.jsx";
 
 const Login = () => {
-  const { setUsername, setAuthentication, isAuthenticated } = useContext(UserContext);
-  const[username, setUN] = useState("");
-  const [email, setEmail] = useState("");
+  const { username, setUsername, setAuthentication, isAuthenticated, userEmail, setUserEmail } = useContext(UserContext);
+  const[enteredUsername, setUN] = useState("");
+  const [enteredEmail, setEnteredEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -30,10 +30,27 @@ const Login = () => {
     return () => unsubscribe();
   }, [setAuthentication]);
 
+
+  const createUserProfile = async (user) =>{
+    try{
+      const userRef = ref(db, "users/" + user.uid);
+      await update(userRef, {
+        username: enteredUsername,
+        email: enteredEmail,
+        createdAt: new Date().toISOString()
+      });
+      console.log("User Profile Created")
+    }
+    catch(error){
+      console.error("Error updating user profile:", error);
+    }
+  }
+
+
   const handleInputChange = (e) =>{
     const {name, value} = e.target;
     if(name === 'email'){
-      setEmail(value);
+      setEnteredEmail(value);
     }
     else if(name === 'username'){
       setUN(value);
@@ -47,17 +64,20 @@ const Login = () => {
    const handleSignUp = async (e) => {
     e.preventDefault();
     try{
-      const userCredential = await createUserWithEmailAndPassword(auth,email,password);
-      setUsername(username);
-
+      const userCredential = await createUserWithEmailAndPassword(auth,enteredEmail,password);
       const user = userCredential.user;
+
+      setUsername(enteredUsername);
+
+      await createUserProfile(user);
+
       await sendEmailVerification(user);
 
       setUN('');
-      setEmail('');
+      setEnteredEmail('');
       setPassword('');
-
       setAuthentication(true);
+
       alert("Verification email sent! Please check your inbox.")
     }
     catch(error){
@@ -68,17 +88,28 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault()
     try{
-      await signInWithEmailAndPassword(auth,email,password);
-      setEmail('');
+      await signInWithEmailAndPassword(auth,enteredEmail,password);
+      setEnteredEmail('');
       setPassword('');
       setAuthentication(true);
-      alert("Signed In");
     }
     catch(error){
       alert("Incorrect email or password");
       setError(error.message);
     }
     
+  }
+
+  const handleSignOut = async (e) => {
+    try{
+      await signOut(auth);
+      setUsername('');
+      setAuthentication(false);
+    }
+    catch(error){
+      setError(error.message);
+    }
+      
   }
 
   if(loading){
@@ -90,6 +121,7 @@ const Login = () => {
       <div>
         <h1>User Info</h1>
         <p>Welcome, {username}!</p>
+        <button onClick={handleSignOut}>Sign Out</button>
       </div>
     );
   }
@@ -106,7 +138,7 @@ const Login = () => {
               <div className="flip-card__front">
                 <div className="title">Log in</div>
                 <form className="flip-card__form">
-                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange} value={email}/>
+                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange} value={enteredEmail}/>
                   <input className="flip-card__input" name="password" placeholder="Password" type="password" onChange={handleInputChange} value={password}/>
                   <button className="flip-card__btn" onClick={handleLogin}>Let`s go!</button>
                 </form>
@@ -114,8 +146,8 @@ const Login = () => {
               <div className="flip-card__back">
                 <div className="title">Sign up</div>
                 <form className="flip-card__form">
-                  <input className="flip-card__input" name="username" placeholder="Username" type="name" onChange={handleInputChange} value={username}/>
-                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange} value={email}/>
+                  <input className="flip-card__input" name="username" placeholder="Username" type="name" onChange={handleInputChange} value={enteredUsername}/>
+                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange} value={enteredEmail}/>
                   <input className="flip-card__input" name="password" placeholder="Password" type="password" onChange={handleInputChange}value={password} />
                   <button className="flip-card__btn" onClick={handleSignUp}>Confirm!</button>
                 </form>
