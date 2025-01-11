@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { UserContext } from './UserContext';
+import { auth, createUserWithEmailAndPassword, sendEmailVerification } from '../api/Firebase-config.js';
 
 const Login = () => {
-  const { name, username, setUsername } = useContext(UserContext);
-
-  const[tempUN, setUN] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
+  const { setUsername } = useContext(UserContext);
+  const[username, setUN] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) =>{
     const {name, value} = e.target;
@@ -23,7 +24,25 @@ const Login = () => {
 
   }
 
-  const handleSignUp = () => {
+   const handleSignUp = async (e) => {
+    e.preventDefault();
+    try{
+      const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+      setUsername(username);
+
+      const user = userCredential.user;
+      await sendEmailVerification(user);
+
+      setUN('');
+      setEmail('');
+      setPassword('');
+
+      alert("Verification email sent! Please check your inbox.")
+    }
+    catch(error){
+      setError(error.message);
+    }
+    
     
   }
   return (
@@ -46,10 +65,10 @@ const Login = () => {
               <div className="flip-card__back">
                 <div className="title">Sign up</div>
                 <form className="flip-card__form">
-                  <input className="flip-card__input" name="username" placeholder="Username" type="name" onChange={handleInputChange}/>
-                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange}/>
-                  <input className="flip-card__input" name="password" placeholder="Password" type="password" onChange={handleInputChange} />
-                  <button className="flip-card__btn">Confirm!</button>
+                  <input className="flip-card__input" name="username" placeholder="Username" type="name" onChange={handleInputChange} value={username}/>
+                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange} value={email}/>
+                  <input className="flip-card__input" name="password" placeholder="Password" type="password" onChange={handleInputChange}value={password} />
+                  <button className="flip-card__btn" onClick={handleSignUp}>Confirm!</button>
                 </form>
               </div>
             </div>
@@ -71,7 +90,8 @@ const StyledWrapper = styled.div`
     display: flex; 
     align-items: center;
     justify-content: center;
-    height: 100vh; 
+    height: 75vh; 
+    width: 500 px;
   }
   /* switch card */
   .switch {

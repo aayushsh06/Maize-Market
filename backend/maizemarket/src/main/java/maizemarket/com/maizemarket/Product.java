@@ -35,6 +35,7 @@ public class Product {
     private boolean isAvailable;
     private String condition;
     private String seller;
+    private String sellerEmail;
     @JsonFormat(pattern = "MM-dd-yyyy") 
     private LocalDate releaseDate; 
     private String photoUrl;

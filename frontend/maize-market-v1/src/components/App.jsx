@@ -8,6 +8,8 @@ import AddProductModal from './AddProductModal.jsx';
 import Navbar from './Navbar.jsx';
 import Home from './Home.jsx';
 import SignIn from './Login.jsx';
+import { UserContext } from './UserContext';
+import { useContext } from 'react';
 
 function App() {
   const formatDate = (date) => {
@@ -21,6 +23,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file,setFile] = useState(undefined);
+  const {username} = useContext(UserContext);
   const [values,setValues] = useState({
     name: '', 
     description: '', 
@@ -28,7 +31,7 @@ function App() {
     category: '',
     condition: '',
     isAvailable: true,
-    seller: 'EpicSeller123',
+    seller: username,
     releaseDate: formatDate(new Date())
   });
   const location = useLocation();
