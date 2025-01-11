@@ -1,14 +1,34 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { UserContext } from './UserContext';
-import { auth, createUserWithEmailAndPassword, sendEmailVerification } from '../api/Firebase-config.js';
+import { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence } from '../api/Firebase-config.js';
+import Loader from "./Loader.jsx";
 
 const Login = () => {
-  const { setUsername } = useContext(UserContext);
+  const { setUsername, setAuthentication, isAuthenticated } = useContext(UserContext);
   const[username, setUN] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setPersistence(auth, browserLocalPersistence)
+      .catch((error) => console.log(error.message));
+  }, []); 
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setLoading(false);
+      if (user) {
+        setAuthentication(true);
+      } else {
+        setAuthentication(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [setAuthentication]);
 
   const handleInputChange = (e) =>{
     const {name, value} = e.target;
@@ -37,14 +57,43 @@ const Login = () => {
       setEmail('');
       setPassword('');
 
+      setAuthentication(true);
       alert("Verification email sent! Please check your inbox.")
     }
     catch(error){
       setError(error.message);
     }
-    
+  }
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    try{
+      await signInWithEmailAndPassword(auth,email,password);
+      setEmail('');
+      setPassword('');
+      setAuthentication(true);
+      alert("Signed In");
+    }
+    catch(error){
+      alert("Incorrect email or password");
+      setError(error.message);
+    }
     
   }
+
+  if(loading){
+    return <Loader></Loader>
+  }
+
+  if (isAuthenticated) {
+    return (
+      <div>
+        <h1>User Info</h1>
+        <p>Welcome, {username}!</p>
+      </div>
+    );
+  }
+
   return (
     <StyledWrapper>
       <div className="wrapper">
@@ -57,9 +106,9 @@ const Login = () => {
               <div className="flip-card__front">
                 <div className="title">Log in</div>
                 <form className="flip-card__form">
-                  <input className="flip-card__input" name="email" placeholder="Email" type="email" />
-                  <input className="flip-card__input" name="password" placeholder="Password" type="password" />
-                  <button className="flip-card__btn">Let`s go!</button>
+                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange} value={email}/>
+                  <input className="flip-card__input" name="password" placeholder="Password" type="password" onChange={handleInputChange} value={password}/>
+                  <button className="flip-card__btn" onClick={handleLogin}>Let`s go!</button>
                 </form>
               </div>
               <div className="flip-card__back">
