@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getProducts } from '../api/ProductService.js';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import Header from "./Header.jsx";
 import ProductList from "./ProductList.jsx";
@@ -8,8 +8,6 @@ import AddProductModal from './AddProductModal.jsx';
 import Navbar from './NavBar.jsx';
 import Home from './Home.jsx';
 import SignIn from './Login.jsx';
-import { UserContext } from './UserContext';
-import { useContext } from 'react';
 
 function App() {
   const formatDate = (date) => {
@@ -23,7 +21,6 @@ function App() {
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file,setFile] = useState(undefined);
-  const {username, setUsername, email, setEmail} = useContext(UserContext);
   
   const [values,setValues] = useState({
     name: '', 
@@ -37,7 +34,7 @@ function App() {
     releaseDate: formatDate(new Date())
   });
 
-  const location = useLocation();
+
   
 
   const getAllProducts = async (page = 0, size = 10) => {
@@ -56,10 +53,9 @@ function App() {
 
 
   const toggleModal = (show) => {
-    setIsModalOpen(show);
+      setIsModalOpen(show);
   }
 
-  const shouldShowHeader = location.pathname === '/products';
 
   return (
     <>
@@ -77,7 +73,8 @@ function App() {
       </main>
 
       <AddProductModal 
-        isModalOpen={isModalOpen} 
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen} 
         toggleModal={toggleModal}
         file={file}
         setFile={setFile}

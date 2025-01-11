@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import './AddProductModal.css';
 import { addProduct, updatePhoto } from '../api/ProductService';
+import { useNavigate } from 'react-router-dom';
+import {auth} from '../api/Firebase-config.js';
 import axios from 'axios';
 
-const AddProductModal = ({ isModalOpen, toggleModal, file, setFile, values, setValues, getAllProducts }) => {
+const AddProductModal = ({ isModalOpen, setIsModalOpen, toggleModal, file, setFile, values, setValues, getAllProducts }) => {
     const formatDate = (date) => {
         const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
         const day = date.getDate().toString().padStart(2, '0');
@@ -14,25 +16,50 @@ const AddProductModal = ({ isModalOpen, toggleModal, file, setFile, values, setV
 
     const fileInputRef = useRef(null);
     const modalRef = useRef(null);
-    useEffect(() => { isModalOpen ? modalRef.current.showModal() : modalRef.current.close(); }, [isModalOpen])
+    const navigate = useNavigate();
     useEffect(() => {
-        if (isModalOpen) {
-            modalRef.current.showModal();
-        }
-        else {
-            setValues((prevValues) =>({
-                ...prevValues,
-                name: '',
-                description: '',
-                price: '',
-                category: '',
-                condition: '',
-            }));
-            setFile(null);
-            setImagePreview(null);
-            modalRef.current.close();
-        }
-    },[isModalOpen])
+        const handleModal = async () => {
+            if (isModalOpen) {
+                try{
+                    const user = auth.currentUser;
+                    if(user){
+                        await user.reload();
+                    }
+                    if(localStorage.getItem('isAuthenticated')==='true' && user && user.emailVerified){
+                        modalRef.current.showModal();
+                    }
+                    else{
+                        if(localStorage.getItem('isAuthenticated')==='true'){
+                            alert("Email not verified yet. Please check your inbox.");  
+                        }
+                        else{
+                            navigate('/login');
+                            alert("Must Login to List a Product");
+                        }
+                        setIsModalOpen(false);
+                    }
+                }
+                catch(error){
+                    console.error("Error Checking User Status",error);
+                }
+            }
+            else {
+                setValues((prevValues) =>({
+                    ...prevValues,
+                    name: '',
+                    description: '',
+                    price: '',
+                    category: '',
+                    condition: '',
+                }));
+                setFile(null);
+                setImagePreview(null);
+                modalRef.current.close();
+            }
+        };
+
+        handleModal();
+    },[isModalOpen]);
 
     const [imagePreview, setImagePreview] = useState(null);
     useEffect(() => {

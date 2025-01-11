@@ -31,8 +31,10 @@ const Login = () => {
       setLoading(false);
       if (user) {
         setAuthentication(true);
+        localStorage.setItem('isAuthenticated', true);
       } else {
         setAuthentication(false);
+        localStorage.setItem('isAuthenticated', false);
       }
     });
 
@@ -75,13 +77,11 @@ const Login = () => {
     try{
       const userCredential = await createUserWithEmailAndPassword(auth,enteredEmail,password);
       const user = userCredential.user;
-      const fetchedUsername = userData.username;
-      const fetchedEmail = userData.email;
 
-      setUsername(fetchedUsername);
-      localStorage.setItem('username', fetchedUsername);
-      setEmail(fetchedEmail);
-      localStorage.setItem('email', fetchedEmail);
+      setUsername(enteredUsername);
+      localStorage.setItem('username', enteredUsername);
+      setEmail(enteredEmail);
+      localStorage.setItem('email', enteredEmail);
 
       await createUserProfile(user);
 
@@ -90,6 +90,7 @@ const Login = () => {
       setEnteredEmail('');
       setEnteredUsername('');
       setPassword('');
+      setAuthentication(true);
 
       alert("Verification email sent! Please check your inbox.")
     }
@@ -114,7 +115,7 @@ const Login = () => {
 
         setUsername(fetchedUsername);
         localStorage.setItem('username', fetchedUsername);
-        //setEmail(fetchedEmail);
+        setEmail(fetchedEmail);
         localStorage.setItem('email', fetchedEmail);
 
         setEnteredEmail('');
@@ -142,6 +143,7 @@ const Login = () => {
       setEmail('');
       localStorage.removeItem('email');
       setAuthentication(false);
+      localStorage.setItem('isAuthenticated', false);
     }
     catch(error){
       setError(error.message);
