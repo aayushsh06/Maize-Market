@@ -1,21 +1,30 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { UserContext } from './UserContext';
-import { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut, db, ref, update } from '../api/Firebase-config.js';
+import { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut, db, ref, update, get } from '../api/Firebase-config.js';
 import Loader from "./Loader.jsx";
 
 const Login = () => {
-  const { username, setUsername, setAuthentication, isAuthenticated, userEmail, setUserEmail } = useContext(UserContext);
-  const[enteredUsername, setUN] = useState("");
+  const { username, setUsername, setAuthentication, isAuthenticated, email, setEmail } = useContext(UserContext);
+  const [enteredUsername, setEnteredUsername] = useState("");
   const [enteredEmail, setEnteredEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    const storedEmail = localStorage.getItem('email');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+    if(storedEmail){
+      setEmail(storedEmail);
+    }
+
     setPersistence(auth, browserLocalPersistence)
       .catch((error) => console.log(error.message));
-  }, []); 
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -53,7 +62,7 @@ const Login = () => {
       setEnteredEmail(value);
     }
     else if(name === 'username'){
-      setUN(value);
+      setEnteredUsername(value);
     }
     else{
       setPassword(value);
@@ -66,17 +75,21 @@ const Login = () => {
     try{
       const userCredential = await createUserWithEmailAndPassword(auth,enteredEmail,password);
       const user = userCredential.user;
+      const fetchedUsername = userData.username;
+      const fetchedEmail = userData.email;
 
-      setUsername(enteredUsername);
+      setUsername(fetchedUsername);
+      localStorage.setItem('username', fetchedUsername);
+      setEmail(fetchedEmail);
+      localStorage.setItem('email', fetchedEmail);
 
       await createUserProfile(user);
 
       await sendEmailVerification(user);
 
-      setUN('');
       setEnteredEmail('');
+      setEnteredUsername('');
       setPassword('');
-      setAuthentication(true);
 
       alert("Verification email sent! Please check your inbox.")
     }
@@ -88,10 +101,31 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault()
     try{
-      await signInWithEmailAndPassword(auth,enteredEmail,password);
-      setEnteredEmail('');
-      setPassword('');
-      setAuthentication(true);
+      const userCredential = await signInWithEmailAndPassword(auth,enteredEmail,password);
+      const user = userCredential.user;
+
+      const userRef = ref(db, 'users/' + user.uid);
+      const snapshot = await get(userRef);
+
+      if(snapshot.exists()){
+        const userData = snapshot.val();
+        const fetchedUsername = userData.username;
+        const fetchedEmail = userData.email;
+
+        setUsername(fetchedUsername);
+        localStorage.setItem('username', fetchedUsername);
+        //setEmail(fetchedEmail);
+        localStorage.setItem('email', fetchedEmail);
+
+        setEnteredEmail('');
+        setPassword('');
+        setAuthentication(true);
+      }
+      else{
+        console.log("No user data found!");
+        alert("An unexpected error occured!")
+      }
+      
     }
     catch(error){
       alert("Incorrect email or password");
@@ -104,6 +138,9 @@ const Login = () => {
     try{
       await signOut(auth);
       setUsername('');
+      localStorage.removeItem('username')
+      setEmail('');
+      localStorage.removeItem('email');
       setAuthentication(false);
     }
     catch(error){

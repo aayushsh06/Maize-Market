@@ -5,7 +5,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Header from "./Header.jsx";
 import ProductList from "./ProductList.jsx";
 import AddProductModal from './AddProductModal.jsx';
-import Navbar from './Navbar.jsx';
+import Navbar from './NavBar.jsx';
 import Home from './Home.jsx';
 import SignIn from './Login.jsx';
 import { UserContext } from './UserContext';
@@ -23,7 +23,8 @@ function App() {
   const [currentPage, setCurrentPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file,setFile] = useState(undefined);
-  const {username} = useContext(UserContext);
+  const {username, setUsername, email, setEmail} = useContext(UserContext);
+  
   const [values,setValues] = useState({
     name: '', 
     description: '', 
@@ -31,10 +32,13 @@ function App() {
     category: '',
     condition: '',
     isAvailable: true,
-    seller: username,
+    seller: localStorage.getItem('username'),
+    sellerEmail: localStorage.getItem('email'),
     releaseDate: formatDate(new Date())
   });
+
   const location = useLocation();
+  
 
   const getAllProducts = async (page = 0, size = 10) => {
     try {
@@ -49,6 +53,7 @@ function App() {
   useEffect(() => {
     getAllProducts();
   }, []);
+
 
   const toggleModal = (show) => {
     setIsModalOpen(show);
