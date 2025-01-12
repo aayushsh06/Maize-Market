@@ -47,6 +47,18 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/myProducts")
+    public ResponseEntity<?> getProductsBySeller(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                @RequestParam(value = "size", defaultValue = "10") int size,
+                                                @RequestParam("sellerEmail") String sellerEmail) {
+        try {
+            Page<Product> products = service.getAllProductsFromSeller(page, size, sellerEmail);
+            return new ResponseEntity<>(products, HttpStatus.OK); 
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
+    }
+
     @GetMapping("/{prodId}")
     public ResponseEntity<?> getProduct(@PathVariable int prodId) {
         try{

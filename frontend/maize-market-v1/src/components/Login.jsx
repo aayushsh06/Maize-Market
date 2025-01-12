@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { UserContext } from './UserContext';
 import { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut, db, ref, update, get } from '../api/Firebase-config.js';
 import Loader from "./Loader.jsx";
+import './UserInfo.css';
+import { getMyProducts } from '../api/ProductService.js';
+import MyProductList from './MyProductList.jsx';
 
 const Login = () => {
   const { username, setUsername, setAuthentication, isAuthenticated, email, setEmail } = useContext(UserContext);
@@ -157,11 +160,13 @@ const Login = () => {
 
   if (isAuthenticated) {
     return (
-      <div>
-        <h1>User Info</h1>
-        <p>Welcome, {username}!</p>
-        <button onClick={handleSignOut}>Sign Out</button>
-      </div>
+    <>
+    <div class="welcome-container">
+        <h1>User Info:</h1>
+        <p><strong>Name:</strong> {username}</p>
+        <p><strong>Email:</strong> {email}</p>
+    </div>
+    </>
     );
   }
 

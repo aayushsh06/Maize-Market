@@ -36,7 +36,7 @@ public class Product {
     private String condition;
     private String seller;
     private String sellerEmail;
-    @JsonFormat(pattern = "MM-dd-yyyy") 
+    @JsonFormat(pattern = "MM-dd-yyyy")
     private LocalDate releaseDate; 
     private String photoUrl;
 

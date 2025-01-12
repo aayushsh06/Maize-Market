@@ -11,6 +11,7 @@ import maizemarket.com.maizemarket.constant.Constant;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +41,11 @@ public class ProductService {
     }
     public Page<Product> getAllProducts(int page, int size) {
        return repo.findAll(PageRequest.of(page,size,Sort.by("name")));
+    }
+
+    public Page<Product> getAllProductsFromSeller(int page, int size, String sellerEmail){
+        Pageable pageable = PageRequest.of(page, size);
+        return repo.findBySellerEmail(sellerEmail, pageable);
     }
 
     public void deleteProduct(int id){
