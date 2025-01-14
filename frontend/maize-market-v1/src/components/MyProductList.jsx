@@ -2,7 +2,7 @@ import React from 'react'
 import Product from "./Product"
 import './ProductList.css'
 
-const MyProductList = ({data, currentPage, getAllProducts}) => {
+const MyProductList = ({data, currentPage, getAllMyProducts}) => {
   return (
     <main className = 'main'>
         {data?.content?.length === 0 && <div>No Products Available</div>}
@@ -13,10 +13,10 @@ const MyProductList = ({data, currentPage, getAllProducts}) => {
 
         {data?.content?.length > 0 && data?.totalPages > 1 &&
         <div className='pagination'>
-            <a onClick={() => getAllProducts(currentPage - 1)} className={0 === currentPage ? 'disabled' : ''}>&laquo;</a> 
+            <a onClick={() => getAllMyProducts(currentPage - 1)} className={0 === currentPage ? 'disabled' : ''}>&laquo;</a> 
             {data && [...Array(data.totalPages).keys()].map((page,index) => 
-            <a onClick = {getAllProducts(page)} className={currentPage === page ? 'active' : ''} key={page} >{page + 1}</a>)}
-            <a onClick={() => getAllProducts(currentPage + 1)} className={data.totalPages === currentPage+1 ? 'disabled' : ''}>&raquo;</a> 
+            <a onClick = {getAllMyProducts(page)} className={currentPage === page ? 'active' : ''} key={page} >{page + 1}</a>)}
+            <a onClick={() => getAllMyProducts(currentPage + 1)} className={data.totalPages === currentPage+1 ? 'disabled' : ''}>&raquo;</a> 
         </div>
 
         }
@@ -24,4 +24,4 @@ const MyProductList = ({data, currentPage, getAllProducts}) => {
   )
 }
 
-export default MyProductList
+export default MyProductList;

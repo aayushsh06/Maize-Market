@@ -29,3 +29,27 @@ body {
     color: #555;
     margin: 0.5rem 0;
 }
+
+.signOutButton{
+    padding: 12px 18px;
+    margin-top: 7px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: #00274d; 
+    color: #ffcb05; 
+}
+  
+  button.signOutButton:hover {
+    background-color: #ffcb05; 
+    color: #00274d; 
+    opacity: 0.8;
+    transform: translateY(-2px);
+  }
+  
+  button.signOutButton:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+  }

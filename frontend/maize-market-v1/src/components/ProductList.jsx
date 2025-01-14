@@ -24,4 +24,4 @@ const ProductList = ({data, currentPage, getAllProducts}) => {
   )
 }
 
-export default ProductList
+export default ProductList;

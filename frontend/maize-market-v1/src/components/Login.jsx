@@ -4,7 +4,7 @@ import { UserContext } from './UserContext';
 import { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut, db, ref, update, get } from '../api/Firebase-config.js';
 import Loader from "./Loader.jsx";
 import './UserInfo.css';
-import { getMyProducts } from '../api/ProductService.js';
+import { getMyProducts, getProducts } from '../api/ProductService.js';
 import MyProductList from './MyProductList.jsx';
 
 const Login = () => {
@@ -14,6 +14,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [data, setData] = useState({content:[],totalElements:0});
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -154,6 +156,18 @@ const Login = () => {
       
   }
 
+    const getAllMyProducts = async (page = 0, size = 10) => {
+      try {
+        console.log("Worked");
+        const { data } = await getMyProducts(page, size);
+        setData(data);
+
+      } 
+      catch (error) {
+        console.log(error);
+      }
+    }
+
   if(loading){
     return <Loader></Loader>
   }
@@ -161,11 +175,13 @@ const Login = () => {
   if (isAuthenticated) {
     return (
     <>
-    <div class="welcome-container">
+    <div className="welcome-container">
         <h1>User Info:</h1>
-        <p><strong>Name:</strong> {username}</p>
+        <p><strong>Username:</strong> {username}</p>
         <p><strong>Email:</strong> {email}</p>
+        <button className='signOutButton'onClick={handleSignOut}>Sign Out</button>
     </div>
+    <MyProductList data={data} currentPage={currentPage} getAllMyProducts={getAllMyProducts} />
     </>
     );
   }
