@@ -47,7 +47,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/myProducts")
+    @GetMapping("/user")
     public ResponseEntity<?> getProductsBySeller(@RequestParam(value = "page", defaultValue = "0") int page,
                                                 @RequestParam(value = "size", defaultValue = "10") int size,
                                                 @RequestParam("sellerEmail") String sellerEmail) {

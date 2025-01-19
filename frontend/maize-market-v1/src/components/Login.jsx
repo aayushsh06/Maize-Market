@@ -1,11 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { UserContext } from './UserContext';
+import { UserContext } from './UserContext.jsx';
 import { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut, db, ref, update, get } from '../api/Firebase-config.js';
 import Loader from "./Loader.jsx";
-import './UserInfo.css';
-import { getMyProducts, getProducts } from '../api/ProductService.js';
-import MyProductList from './MyProductList.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const { username, setUsername, setAuthentication, isAuthenticated, email, setEmail } = useContext(UserContext);
@@ -14,8 +12,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({content:[],totalElements:0});
+  const [data, setData] = useState({ content: [], totalElements: 0 });
   const [currentPage, setCurrentPage] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -23,7 +22,7 @@ const Login = () => {
     if (storedUsername) {
       setUsername(storedUsername);
     }
-    if(storedEmail){
+    if (storedEmail) {
       setEmail(storedEmail);
     }
 
@@ -46,9 +45,15 @@ const Login = () => {
     return () => unsubscribe();
   }, [setAuthentication]);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/user");
+    }
+  }, [isAuthenticated, navigate])
 
-  const createUserProfile = async (user) =>{
-    try{
+
+  const createUserProfile = async (user) => {
+    try {
       const userRef = ref(db, "users/" + user.uid);
       await update(userRef, {
         username: enteredUsername,
@@ -57,30 +62,30 @@ const Login = () => {
       });
       console.log("User Profile Created")
     }
-    catch(error){
+    catch (error) {
       console.error("Error updating user profile:", error);
     }
   }
 
 
-  const handleInputChange = (e) =>{
-    const {name, value} = e.target;
-    if(name === 'email'){
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'email') {
       setEnteredEmail(value);
     }
-    else if(name === 'username'){
+    else if (name === 'username') {
       setEnteredUsername(value);
     }
-    else{
+    else {
       setPassword(value);
     }
 
   }
 
-   const handleSignUp = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    try{
-      const userCredential = await createUserWithEmailAndPassword(auth,enteredEmail,password);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, enteredEmail, password);
       const user = userCredential.user;
 
       setUsername(enteredUsername);
@@ -99,21 +104,21 @@ const Login = () => {
 
       alert("Verification email sent! Please check your inbox.")
     }
-    catch(error){
+    catch (error) {
       setError(error.message);
     }
   }
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    try{
-      const userCredential = await signInWithEmailAndPassword(auth,enteredEmail,password);
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, enteredEmail, password);
       const user = userCredential.user;
 
       const userRef = ref(db, 'users/' + user.uid);
       const snapshot = await get(userRef);
 
-      if(snapshot.exists()){
+      if (snapshot.exists()) {
         const userData = snapshot.val();
         const fetchedUsername = userData.username;
         const fetchedEmail = userData.email;
@@ -127,64 +132,24 @@ const Login = () => {
         setPassword('');
         setAuthentication(true);
       }
-      else{
+      else {
         console.log("No user data found!");
         alert("An unexpected error occured!")
       }
-      
+
     }
-    catch(error){
+    catch (error) {
       alert("Incorrect email or password");
       setError(error.message);
     }
-    
+
   }
 
-  const handleSignOut = async (e) => {
-    try{
-      await signOut(auth);
-      setUsername('');
-      localStorage.removeItem('username')
-      setEmail('');
-      localStorage.removeItem('email');
-      setAuthentication(false);
-      localStorage.setItem('isAuthenticated', false);
-    }
-    catch(error){
-      setError(error.message);
-    }
-      
-  }
 
-    const getAllMyProducts = async (page = 0, size = 10) => {
-      try {
-        console.log("Worked");
-        const { data } = await getMyProducts(page, size);
-        setData(data);
-
-      } 
-      catch (error) {
-        console.log(error);
-      }
-    }
-
-  if(loading){
+  if (loading) {
     return <Loader></Loader>
   }
 
-  if (isAuthenticated) {
-    return (
-    <>
-    <div className="welcome-container">
-        <h1>User Info:</h1>
-        <p><strong>Username:</strong> {username}</p>
-        <p><strong>Email:</strong> {email}</p>
-        <button className='signOutButton'onClick={handleSignOut}>Sign Out</button>
-    </div>
-    <MyProductList data={data} currentPage={currentPage} getAllMyProducts={getAllMyProducts} />
-    </>
-    );
-  }
 
   return (
     <StyledWrapper>
@@ -198,17 +163,17 @@ const Login = () => {
               <div className="flip-card__front">
                 <div className="title">Log in</div>
                 <form className="flip-card__form">
-                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange} value={enteredEmail}/>
-                  <input className="flip-card__input" name="password" placeholder="Password" type="password" onChange={handleInputChange} value={password}/>
+                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange} value={enteredEmail} />
+                  <input className="flip-card__input" name="password" placeholder="Password" type="password" onChange={handleInputChange} value={password} />
                   <button className="flip-card__btn" onClick={handleLogin}>Let`s go!</button>
                 </form>
               </div>
               <div className="flip-card__back">
                 <div className="title">Sign up</div>
                 <form className="flip-card__form">
-                  <input className="flip-card__input" name="username" placeholder="Username" type="name" onChange={handleInputChange} value={enteredUsername}/>
-                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange} value={enteredEmail}/>
-                  <input className="flip-card__input" name="password" placeholder="Password" type="password" onChange={handleInputChange}value={password} />
+                  <input className="flip-card__input" name="username" placeholder="Username" type="name" onChange={handleInputChange} value={enteredUsername} />
+                  <input className="flip-card__input" name="email" placeholder="Email" type="email" onChange={handleInputChange} value={enteredEmail} />
+                  <input className="flip-card__input" name="password" placeholder="Password" type="password" onChange={handleInputChange} value={password} />
                   <button className="flip-card__btn" onClick={handleSignUp}>Confirm!</button>
                 </form>
               </div>

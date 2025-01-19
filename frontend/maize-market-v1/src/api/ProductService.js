@@ -8,8 +8,8 @@ export async function addProduct(product){
 export async function getProducts(page = 0, size = 10){
     return await axios.get(`${API_URL}?page=${page}&size=${size}`);
 }
-export async function getMyProducts(page = 0, size = 10){
-    return await axios.get(`${API_URL}/myProducts?page=${page}&size=${size}`)
+export async function getMyProducts(page = 0, size = 10, sellerEmail){
+    return await axios.get(`${API_URL}/user?page=${page}&size=${size}&sellerEmail=${sellerEmail}`)
 }
 export async function getProduct(id){
     return await axios.get(`${API_URL}/${id}`);
