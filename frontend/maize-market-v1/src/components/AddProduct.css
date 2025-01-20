@@ -1,0 +1,246 @@
+.add-product-page .page-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #00274C 0%, #001a33 100%);
+    padding: 2rem 1rem;
+}
+
+.add-product-page .add-product-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 2.5rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.add-product-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 3px solid #FFCB05;
+}
+
+.add-product-header h2 {
+    color: #00274C;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.add-product-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.product-details {
+    display: grid;
+    gap: 2rem;
+}
+
+.input-box {
+    margin-bottom: 0.5rem;
+}
+
+.details {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #00274C;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.details i {
+    color: #FFCB05;
+    font-size: 1.2rem;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: #FFCB05;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(255, 203, 5, 0.1);
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.radio-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.radio-option {
+    position: relative;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    background: white;
+}
+
+.radio-option:hover {
+    border-color: #FFCB05;
+    background-color: #fffdf5;
+}
+
+.radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.radio-option label {
+    cursor: pointer;
+    font-weight: 500;
+    color: #495057;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.radio-option:has(input:checked) {
+    border-color: #00274C;
+    background-color: #00274C;
+}
+
+.radio-option:has(input:checked) label {
+    color: #FFCB05;
+}
+
+.file-input-container {
+    margin-top: 1rem;
+}
+
+.file-input-box {
+    border: 3px dashed #FFCB05;
+    padding: 2.5rem;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 203, 5, 0.05);
+}
+
+.file-input-box:hover {
+    background-color: rgba(255, 203, 5, 0.1);
+    transform: translateY(-2px);
+}
+
+.file-input-box input[type="file"] {
+    display: none;
+}
+
+.file-input-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: #00274C;
+}
+
+.file-input-label i {
+    font-size: 2.5rem;
+    color: #FFCB05;
+}
+
+.image-preview {
+    margin-top: 1.5rem;
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.image-preview img {
+    max-width: 300px;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.btn {
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    min-width: 160px;
+}
+
+.btn-primary {
+    background: #00274C;
+    color: #FFCB05;
+}
+
+.btn-primary:hover {
+    background: #001a33;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-danger {
+    background: #fff;
+    color: #00274C;
+    border: 2px solid #00274C;
+}
+
+.btn-danger:hover {
+    background: #00274C;
+    color: #FFCB05;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+    .add-product-container {
+        margin: 10px;
+        padding: 1.5rem;
+    }
+
+    .add-product-header h2 {
+        font-size: 2rem;
+    }
+
+    .radio-group {
+        grid-template-columns: 1fr;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+} 

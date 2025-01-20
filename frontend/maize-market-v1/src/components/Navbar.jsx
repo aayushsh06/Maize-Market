@@ -9,8 +9,7 @@ const Navbar = ({toggleModal}) => {
     navigate("/home");
   }
   const handleAddClick = () => {
-    navigate("/products");
-    toggleModal(true);
+    navigate("/products/add");
   }
   const handleUserClick = () => {
     navigate("/login");
