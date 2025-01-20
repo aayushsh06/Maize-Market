@@ -1,56 +1,133 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0; 
+    background: #f8f9fa;
+}
+
+.user-info-page {
+    min-height: 100vh;
+    padding: 2rem;
+    background: transparent;
 }
 
 .welcome-container {
-    position: relative; 
-    top: 30%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
+    position: relative;
     text-align: center;
     background: #ffffff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    padding: 2.5rem;
+    border-radius: 15px;
+    border: 2px solid #00274C;
+    box-shadow: 0 10px 20px rgba(0, 39, 76, 0.15);
+    max-width: 500px;
     width: 90%;
-    margin-top: 150px;
+    margin: 2rem auto;
+    transition: all 0.3s ease;
+}
+
+.welcome-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 39, 76, 0.2);
+}
+
+.user-header {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.user-icon {
+    font-size: 2.5rem;
+    color: #00274C;
+}
+
+.user-details {
+    margin: 2rem 0;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.info-row:hover {
+    border-color: #00274C;
+    box-shadow: 0 4px 8px rgba(0, 39, 76, 0.1);
+}
+
+.info-icon {
+    color: #00274C;
+    font-size: 1.2rem;
 }
 
 .welcome-container h1 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 1rem;
+    font-size: 28px;
+    font-weight: 700;
+    color: #00274C;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .welcome-container p {
-    font-size: 1rem;
-    color: #555;
-    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    color: #00274C;
+    margin: 0;
 }
 
-.signOutButton{
-    padding: 12px 18px;
-    margin-top: 7px;
-    font-size: 1.1rem;
+.signOutButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 140px;
+    height: 45px;
+    margin: 1.5rem auto 0;
+    font-size: 17px;
+    font-weight: 600;
     border: none;
-    border-radius: 6px;
+    border-radius: 25px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    background-color: #00274d; 
-    color: #ffcb05; 
+    transition: all 0.3s ease;
+    background-color: #00274C;
+    color: #FFCB05;
+    box-shadow: 0 4px 8px rgba(0, 39, 76, 0.3);
 }
-  
-  button.signOutButton:hover {
-    background-color: #ffcb05; 
-    color: #00274d; 
-    opacity: 0.8;
+
+.signOutButton:hover {
     transform: translateY(-2px);
-  }
-  
-  button.signOutButton:hover {
-    opacity: 0.8;
-    transform: translateY(-2px);
-  }
+    box-shadow: 0 6px 12px rgba(0, 39, 76, 0.4);
+    background-color: #001324;
+}
+
+.signOutButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 39, 76, 0.4);
+}
+
+.signout-icon {
+    font-size: 1.2rem;
+}
+
+.products-section {
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+.productsHeader {
+    font-size: 28px;
+    font-weight: 700;
+    color: #00274C;
+    text-align: center;
+    margin: 2rem 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

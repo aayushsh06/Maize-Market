@@ -6,11 +6,12 @@
 }
 
 .products-header {
-    background-color: #00274C;
+    background: #00274C;
     padding: 3rem 2rem;
     color: white;
     position: relative;
     text-align: center;  /* Center align the header text */
+    border-bottom: 4px solid #FFCB05;
 }
 
 .products-header::after {

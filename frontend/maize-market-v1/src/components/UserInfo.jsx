@@ -5,6 +5,7 @@ import { UserContext } from './UserContext.jsx';
 import { getMyProducts } from '../api/ProductService.js';
 import MyProductList from './MyProductList.jsx';
 import './UserInfo.css';
+import { FaUser, FaEnvelope, FaSignOutAlt } from 'react-icons/fa';
 
 const UserInfo = () => {
     const { username, setUsername, isAuthenticated, setAuthentication, email, setEmail } = useContext(UserContext);
@@ -44,16 +45,32 @@ const UserInfo = () => {
     }, [email]);
 
     return (
-        <>
+        <div className="user-info-page">
             <div className="welcome-container">
-                <h1>User Info:</h1>
-                <p><strong>Username:</strong> {username}</p>
-                <p><strong>Email:</strong> {email}</p>
-                <button className='signOutButton' onClick={handleSignOut}>Sign Out</button>
+                <div className="user-header">
+                    <FaUser className="user-icon" />
+                    <h1>User Profile</h1>
+                </div>
+                <div className="user-details">
+                    <div className="info-row">
+                        <FaUser className="info-icon" />
+                        <p><strong>Username:</strong> {username}</p>
+                    </div>
+                    <div className="info-row">
+                        <FaEnvelope className="info-icon" />
+                        <p><strong>Email:</strong> {email}</p>
+                    </div>
+                </div>
+                <button className='signOutButton' onClick={handleSignOut}>
+                    <FaSignOutAlt className="signout-icon" />
+                    Sign Out
+                </button>
             </div>
-            <h1 className="productsHeader">Your Products:</h1>
-            <MyProductList data={data} currentPage={currentPage} sellerEmail={email} getMyProducts={getAllMyProducts} />
-        </>
+            <div className="products-section">
+                <h1 className="productsHeader">Your Products</h1>
+                <MyProductList data={data} currentPage={currentPage} sellerEmail={email} getMyProducts={getAllMyProducts} />
+            </div>
+        </div>
     )
 }
 

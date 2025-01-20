@@ -168,7 +168,7 @@ const AddProduct = ({ getAllProducts }) => {
                                     Condition
                                 </div>
                                 <div className="radio-group">
-                                    {['New', 'Like New', 'Good', 'Fair', 'Poor'].map((condition) => (
+                                    {['New', 'Good', 'Fair', 'Poor'].map((condition) => (
                                         <div key={condition} className="radio-option">
                                             <input
                                                 type="radio"

@@ -187,17 +187,18 @@ const Login = () => {
 
 const StyledWrapper = styled.div`
   .wrapper {
-    --input-focus: #2d8cf0;
-    --font-color: #323232;
+    --input-focus: #00274C;
+    --font-color: #00274C;
     --font-color-sub: #666;
     --bg-color: #fff;
     --bg-color-alt: #666;
-    --main-color: #323232;
+    --main-color: #00274C;
     display: flex; 
     align-items: center;
     justify-content: center;
-    height: 75vh; 
-    width: 500 px;
+    height: 85vh;
+    width: 100%;
+    background: linear-gradient(145deg, #FFCB05, #fff);
   }
   /* switch card */
   .switch {
@@ -219,8 +220,9 @@ const StyledWrapper = styled.div`
     top: 0;
     width: 100px;
     text-decoration: underline;
-    color: var(--font-color);
+    color: #00274C;
     font-weight: 600;
+    transition: all 0.3s ease;
   }
 
   .card-side::after {
@@ -230,8 +232,9 @@ const StyledWrapper = styled.div`
     top: 0;
     width: 100px;
     text-decoration: none;
-    color: var(--font-color);
+    color: #00274C;
     font-weight: 600;
+    transition: all 0.3s ease;
   }
 
   .toggle {
@@ -271,7 +274,7 @@ const StyledWrapper = styled.div`
   }
 
   .toggle:checked + .slider {
-    background-color: var(--input-focus);
+    background-color: #FFCB05;
   }
 
   .toggle:checked + .slider:before {
@@ -310,18 +313,19 @@ const StyledWrapper = styled.div`
   }
 
   .flip-card__front, .flip-card__back {
-    padding: 20px;
+    padding: 30px;
     position: absolute;
     display: flex;
     flex-direction: column;
     justify-content: center;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    background: lightgrey;
+    background: rgba(255, 255, 255, 0.95);
     gap: 20px;
-    border-radius: 5px;
-    border: 2px solid var(--main-color);
-    box-shadow: 4px 4px var(--main-color);
+    border-radius: 15px;
+    border: 2px solid #00274C;
+    box-shadow: 0 10px 20px rgba(0, 39, 76, 0.15);
+    transition: all 0.3s ease;
   }
 
   .flip-card__back {
@@ -338,52 +342,67 @@ const StyledWrapper = styled.div`
 
   .title {
     margin: 20px 0 20px 0;
-    font-size: 25px;
-    font-weight: 900;
+    font-size: 28px;
+    font-weight: 700;
     text-align: center;
-    color: var(--main-color);
+    color: #00274C;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   .flip-card__input {
     width: 250px;
-    height: 40px;
-    border-radius: 5px;
-    border: 2px solid var(--main-color);
+    height: 45px;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
     background-color: var(--bg-color);
-    box-shadow: 4px 4px var(--main-color);
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--font-color);
-    padding: 5px 10px;
+    box-shadow: 0 4px 8px rgba(0, 39, 76, 0.05);
+    font-size: 16px;
+    font-weight: 500;
+    color: #00274C;
+    padding: 5px 15px;
     outline: none;
+    transition: all 0.3s ease;
   }
 
   .flip-card__input::placeholder {
-    color: var(--font-color-sub);
-    opacity: 0.8;
+    color: rgba(0, 39, 76, 0.6);
   }
 
   .flip-card__input:focus {
-    border: 2px solid var(--input-focus);
-  }
-
-  .flip-card__btn:active, .button-confirm:active {
-    box-shadow: 0px 0px var(--main-color);
-    transform: translate(3px, 3px);
+    border: 2px solid #00274C;
+    box-shadow: 0 4px 8px rgba(0, 39, 76, 0.2);
   }
 
   .flip-card__btn {
     margin: 20px 0 20px 0;
-    width: 120px;
-    height: 40px;
-    border-radius: 5px;
-    border: 2px solid var(--main-color);
-    background-color: var(--bg-color);
-    box-shadow: 4px 4px var(--main-color);
+    width: 140px;
+    height: 45px;
+    border-radius: 25px;
+    border: none;
+    background-color: #00274C;
+    color: #FFCB05;
     font-size: 17px;
     font-weight: 600;
-    color: var(--font-color);
     cursor: pointer;
-  }`;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 39, 76, 0.3);
+  }
+
+  .flip-card__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 39, 76, 0.4);
+    background-color: #001324;
+  }
+
+  .flip-card__btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 39, 76, 0.4);
+  }
+
+  .flip-card__inner {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+`;
 
 export default Login;
