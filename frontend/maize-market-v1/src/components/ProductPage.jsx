@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useState, useContext } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import { getProduct } from '../api/ProductService';
 import Loader from './Loader.jsx';
+import { UserContext } from './UserContext';
 import './ProductPage.css'
 
 const ProductPage = () => {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const { email } = useContext(UserContext);
+    
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -26,12 +28,12 @@ const ProductPage = () => {
     if (loading) {
         return <Loader></Loader>
     }
-
+    
     return (
         <div className="page-container">
-            <div className="productPage-container">
+            <div className="productPage-container" data-available={true}>
                 <div className="product-image-section">
-                    <div className="image-wrapper">
+                    <div className="image-wrapper" data-available={true}>
                         <img src={product.photoUrl} alt={product.name}/>
                     </div>
                 </div>
@@ -39,12 +41,13 @@ const ProductPage = () => {
                 <div className="product-details">
                     <div className="product-header">
                         <h1 className="product-name">{product.name}</h1>
-                        <p className="product-price">${product.price}</p>
-                    </div>
-
-                    <div className="product-availability-badge" 
-                         data-available={product.available}>
-                        {product.available ? 'In Stock' : 'Out of Stock'}
+                        <div className="product-price">${product.price}</div>
+                        <div 
+                            className="product-availability-badge" 
+                            data-available={true}
+                        >
+                            In Stock
+                        </div>
                     </div>
 
                     <div className="product-main-info">
@@ -53,7 +56,7 @@ const ProductPage = () => {
                             <p>{product.description}</p>
                         </div>
 
-                        <div className="product-specs">
+                        <div className="product-specs" data-available={true}>
                             <div className="spec-item">
                                 <span className="spec-label">Condition</span>
                                 <span className="spec-value">{product.condition}</span>
@@ -76,6 +79,14 @@ const ProductPage = () => {
                             <a href={`mailto:${product.sellerEmail}`} className="seller-email">
                                 {product.sellerEmail}
                             </a>
+                            {email === product.sellerEmail && (
+                                <Link 
+                                    to={`/products/edit/${product.id}`} 
+                                    className="edit-product-button"
+                                >
+                                    Edit Listing
+                                </Link>
+                            )}
                         </div>
                     </div>
 

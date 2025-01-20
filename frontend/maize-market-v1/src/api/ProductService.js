@@ -15,7 +15,7 @@ export async function getProduct(id){
     return await axios.get(`${API_URL}/${id}`);
 }
 export async function updateProduct(product){
-    return await axios.post(`${API_URL}/${id}`,product);
+    return await axios.put(`${API_URL}/${product.id}`, product);
 }
 export async function updatePhoto(formData){
     return await axios.put(`${API_URL}/image`,formData);

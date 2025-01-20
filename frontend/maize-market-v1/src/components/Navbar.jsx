@@ -1,15 +1,34 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
+import { UserContext } from './UserContext.jsx';
+import { auth } from '../api/Firebase-config.js';
+import Notification from './Notification.jsx';
 
 const Navbar = ({toggleModal}) => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useContext(UserContext);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [isVerificationNotice, setIsVerificationNotice] = useState(false);
 
   const handleHomeClick = () => {
     navigate("/home");
   }
   const handleAddClick = () => {
-    navigate("/products/add");
+    const currentUser = auth.currentUser;
+    
+    if (!isAuthenticated) {
+      setIsVerificationNotice(false);
+      setNotificationMessage("You need to be logged in to add products. Please sign in or create an account.");
+      setShowNotification(true);
+    } else if (currentUser && !currentUser.emailVerified) {
+      setIsVerificationNotice(true);
+      setNotificationMessage("Please verify your email before adding products. Check your inbox for the verification link.");
+      setShowNotification(true);
+    } else {
+      navigate("/products/add");
+    }
   }
   const handleUserClick = () => {
     navigate("/login");
@@ -17,6 +36,14 @@ const Navbar = ({toggleModal}) => {
   const handleProductsClick = () => {
     navigate("/products");
   }
+
+  const handleNotificationAction = () => {
+    setShowNotification(false);
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  };
+
   return (
     <StyledWrapper>
       <div className="button-container">
@@ -46,6 +73,23 @@ const Navbar = ({toggleModal}) => {
           </svg>
         </button>
       </div>
+      {isVerificationNotice ? (
+        <Notification 
+          isVisible={showNotification}
+          message={notificationMessage}
+          buttonText="Okay"
+          onClose={() => setShowNotification(false)}
+        />
+      ) : (
+        <Notification 
+          isVisible={showNotification}
+          message={notificationMessage}
+          buttonText="Go to Login"
+          onButtonClick={handleNotificationAction}
+          onClose={() => setShowNotification(false)}
+          showCancelButton={true}
+        />
+      )}
     </StyledWrapper>
   );
 }

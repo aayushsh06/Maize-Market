@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { getProducts } from '../api/ProductService.js';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { UserContext } from './UserContext.jsx';
 
 import Header from "./Header.jsx";
 import ProductList from "./ProductList.jsx";
@@ -10,8 +11,12 @@ import SignIn from './Login.jsx';
 import UserInfo from './UserInfo.jsx';
 import ProductPage from './ProductPage.jsx';
 import AddProduct from './AddProduct.jsx';
+import ProductEdit from './ProductEdit.jsx';
 
 function App() {
+  const { isAuthenticated } = useContext(UserContext);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [data, setData] = useState({content:[], totalElements:0});
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -29,6 +34,22 @@ function App() {
     getAllProducts();
   }, []);
 
+  // Add authentication check
+  const ProtectedRoute = ({ children }) => {
+    if (!isAuthenticated) {
+      return <Navigate to="/login" replace />;
+    }
+    return children;
+  };
+
+  // Add public route check (for login page)
+  const PublicRoute = ({ children }) => {
+    if (isAuthenticated) {
+      return <Navigate to="/user" replace />;
+    }
+    return children;
+  };
+
   return (
     <>
       <Navbar numOfProducts={data.totalElements}></Navbar>
@@ -38,10 +59,39 @@ function App() {
               <Route path="/" element={<Navigate to={"/home"} />} />
               <Route path="/home" element={<Home/>}/>
               <Route path="/products" element={<ProductList data={data} currentPage={currentPage} getAllProducts={getAllProducts} />} />
-              <Route path="/products/add" element={<AddProduct getAllProducts={getAllProducts} />} />
-              <Route path="/login" element={<SignIn/>} />
-              <Route path="/user" element={<UserInfo/>} />
+              <Route 
+                path="/products/add" 
+                element={
+                  <ProtectedRoute>
+                    <AddProduct getAllProducts={getAllProducts} />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/login" 
+                element={
+                  <PublicRoute>
+                    <SignIn/>
+                  </PublicRoute>
+                } 
+              />
+              <Route 
+                path="/user" 
+                element={
+                  <ProtectedRoute>
+                    <UserInfo/>
+                  </ProtectedRoute>
+                } 
+              />
               <Route path="/products/:productId" element={<ProductPage/>}/>
+              <Route 
+                path="/products/edit/:productId" 
+                element={
+                  <ProtectedRoute>
+                    <ProductEdit />
+                  </ProtectedRoute>
+                } 
+              />
             </Routes>
         </div>
       </main>
