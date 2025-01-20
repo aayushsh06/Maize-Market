@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 
-const Navbar = ({toggleModal, numOfProducts}) => {
+const Navbar = ({toggleModal}) => {
   const navigate = useNavigate();
 
   const handleHomeClick = () => {

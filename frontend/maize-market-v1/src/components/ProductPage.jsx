@@ -21,28 +21,66 @@ const ProductPage = () => {
             }
         }
         fetchProduct();
-
     }, [productId])
 
     if (loading) {
         return <Loader></Loader>
     }
+
     return (
-        <div className="productPage-container">
-            <div className="product-image">
-            <img src={product.photoUrl} alt={product.name}/>
-            </div>
-            <div className="product-details">
-            <h1 className="product-name">{product.name}</h1>
-            <p className="product-category"><strong>Category:</strong> {product.category}</p>
-            <p className="product-condition"><strong>Condition:</strong> {product.condition}</p>
-            <p className="product-description"><strong>Description:</strong> {product.description}</p>
-            <p className="product-price"><strong>Price:</strong> ${product.price}</p>
-            <p className="product-release-date"><strong>List Date:</strong> {product.releaseDate}</p>
-            <p className="product-seller"><strong>Seller:</strong> {product.seller}</p>
-            <p className="product-seller-email"><strong>Seller Email:</strong> <a href={product.sellerEmail}>{product.sellerEmail}</a></p>
-            <p className="product-availability"><strong>Availability:</strong> <span className="available">{product.available ? 'In Stock' : 'Out of Stock'}</span></p>
-            <p className="product-id"><strong>Product ID:</strong> {product.id}</p>
+        <div className="page-container">
+            <div className="productPage-container">
+                <div className="product-image-section">
+                    <div className="image-wrapper">
+                        <img src={product.photoUrl} alt={product.name}/>
+                    </div>
+                </div>
+                
+                <div className="product-details">
+                    <div className="product-header">
+                        <h1 className="product-name">{product.name}</h1>
+                        <p className="product-price">${product.price}</p>
+                    </div>
+
+                    <div className="product-availability-badge" 
+                         data-available={product.available}>
+                        {product.available ? 'In Stock' : 'Out of Stock'}
+                    </div>
+
+                    <div className="product-main-info">
+                        <div className="info-group">
+                            <h2>Description</h2>
+                            <p>{product.description}</p>
+                        </div>
+
+                        <div className="product-specs">
+                            <div className="spec-item">
+                                <span className="spec-label">Condition</span>
+                                <span className="spec-value">{product.condition}</span>
+                            </div>
+                            <div className="spec-item">
+                                <span className="spec-label">Category</span>
+                                <span className="spec-value">{product.category}</span>
+                            </div>
+                            <div className="spec-item">
+                                <span className="spec-label">Listed On</span>
+                                <span className="spec-value">{product.releaseDate}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="seller-section">
+                        <h2>Seller Information</h2>
+                        <div className="seller-info">
+                            <p className="seller-name">{product.seller}</p>
+                            <a href={`mailto:${product.sellerEmail}`} className="seller-email">
+                                {product.sellerEmail}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div className="product-id">Product ID: {product.id}</div>
+                </div>
             </div>
         </div>
     )

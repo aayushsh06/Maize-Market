@@ -41,7 +41,7 @@ const UserInfo = () => {
 
     useEffect(() => {
         getAllMyProducts(currentPage);
-    }, []);
+    }, [email]);
 
     return (
         <>

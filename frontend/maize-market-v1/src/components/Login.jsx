@@ -11,7 +11,7 @@ const Login = () => {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
   const [data, setData] = useState({ content: [], totalElements: 0 });
   const [currentPage, setCurrentPage] = useState(0);
   const navigate = useNavigate();

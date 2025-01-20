@@ -9,7 +9,7 @@ const MyProductList = ({ data, currentPage, sellerEmail, getAllMyProducts }) => 
 
   return (
     <main className='main'>
-      {data?.content?.length === 0 && <div>No Products Available</div>}
+      {data?.content?.length === 0 && <div>You Have No Products</div>}
 
       <ul className='product_list'>
         {data?.content?.length > 0 && data.content.map(product => 
