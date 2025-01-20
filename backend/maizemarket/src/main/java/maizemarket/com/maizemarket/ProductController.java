@@ -63,7 +63,7 @@ public class ProductController {
     public ResponseEntity<?> getProduct(@PathVariable int prodId) {
         try{
             Product p = service.getProduct(prodId);
-            return new ResponseEntity<>(p,HttpStatus.FOUND);
+            return new ResponseEntity<>(p,HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);

@@ -31,7 +31,6 @@ const UserInfo = () => {
     const getAllMyProducts = async (page = 0, size = 10) => {
         try {
             const { data } = await getMyProducts(page, size, email);
-            console.log(email);
             setData(data);
 
         }
@@ -52,6 +51,7 @@ const UserInfo = () => {
                 <p><strong>Email:</strong> {email}</p>
                 <button className='signOutButton' onClick={handleSignOut}>Sign Out</button>
             </div>
+            <h1 className="productsHeader">Your Products:</h1>
             <MyProductList data={data} currentPage={currentPage} sellerEmail={email} getMyProducts={getAllMyProducts} />
         </>
     )
