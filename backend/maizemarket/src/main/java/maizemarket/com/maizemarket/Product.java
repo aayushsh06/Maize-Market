@@ -31,7 +31,7 @@ public class Product {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
     private BigDecimal price;
     private String category;
-    @JsonProperty
+    @JsonProperty("isAvailable")
     private boolean isAvailable;
     private String condition;
     private String seller;

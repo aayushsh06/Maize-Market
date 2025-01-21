@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { getProducts } from '../api/ProductService.js';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { UserContext } from './UserContext.jsx';
+import { UserContext } from "./UserContext";
 
 import Header from "./Header.jsx";
 import ProductList from "./ProductList.jsx";

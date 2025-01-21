@@ -20,14 +20,12 @@ const Cart = () => {
       if (!user) return;
 
       try {
-        // Get cart items from Firebase
         const cartRef = ref(db, `carts/${user.uid}`);
         const cartSnapshot = await get(cartRef);
         
         if (cartSnapshot.exists()) {
           const cartData = cartSnapshot.val();
           
-          // Fetch product details for each cart item
           const productPromises = Object.keys(cartData).map(async (productId) => {
             try {
               const response = await getProduct(productId);
