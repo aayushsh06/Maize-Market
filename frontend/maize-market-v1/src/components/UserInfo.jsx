@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { auth, signOut } from '../api/Firebase-config.js';
 import { UserContext } from './UserContext.jsx';
 import { getMyProducts } from '../api/ProductService.js';
 import MyProductList from './MyProductList.jsx';
 import './UserInfo.css';
-import { FaUser, FaEnvelope, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaSignOutAlt, FaBox } from 'react-icons/fa';
 
 const UserInfo = () => {
     const { username, setUsername, isAuthenticated, setAuthentication, email, setEmail } = useContext(UserContext);
@@ -47,28 +47,41 @@ const UserInfo = () => {
     return (
         <div className="user-info-page">
             <div className="welcome-container">
-                <div className="user-header">
-                    <FaUser className="user-icon" />
-                    <h1>User Profile</h1>
-                </div>
+                <h1 className="welcome-header">User Profile</h1>
                 <div className="user-details">
-                    <div className="info-row">
-                        <FaUser className="info-icon" />
-                        <p><strong>Username:</strong> {username}</p>
+                    <div className="user-detail-item">
+                        <span className="user-detail-label">Username:</span>
+                        <span className="user-detail-value">{username}</span>
                     </div>
-                    <div className="info-row">
-                        <FaEnvelope className="info-icon" />
-                        <p><strong>Email:</strong> {email}</p>
+                    <div className="user-detail-item">
+                        <span className="user-detail-label">Email:</span>
+                        <span className="user-detail-value">{email}</span>
                     </div>
+                    <button className="logout-button" onClick={handleSignOut}>
+                        Sign Out
+                    </button>
                 </div>
-                <button className='signOutButton' onClick={handleSignOut}>
-                    <FaSignOutAlt className="signout-icon" />
-                    Sign Out
-                </button>
             </div>
+
             <div className="products-section">
-                <h1 className="productsHeader">Your Products</h1>
-                <MyProductList data={data} currentPage={currentPage} sellerEmail={email} getMyProducts={getAllMyProducts} />
+                <h2 className="productsHeader">Your Products</h2>
+                {data?.content?.length === 0 ? (
+                    <div className="empty-state">
+                        <FaBox className="empty-icon" />
+                        <h2>You haven't listed any products yet</h2>
+                        <p>Start selling by adding your first product!</p>
+                        <Link to="/products/add" className="add-product-button">
+                            Add Your First Product
+                        </Link>
+                    </div>
+                ) : (
+                    <MyProductList 
+                        data={data} 
+                        currentPage={currentPage} 
+                        sellerEmail={email} 
+                        getMyProducts={getAllMyProducts} 
+                    />
+                )}
             </div>
         </div>
     )

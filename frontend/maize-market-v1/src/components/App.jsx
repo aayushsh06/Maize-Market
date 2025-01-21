@@ -12,6 +12,7 @@ import UserInfo from './UserInfo.jsx';
 import ProductPage from './ProductPage.jsx';
 import AddProduct from './AddProduct.jsx';
 import ProductEdit from './ProductEdit.jsx';
+import Cart from './Cart.jsx';
 
 function App() {
   const { isAuthenticated } = useContext(UserContext);
@@ -89,6 +90,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ProductEdit />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/cart" 
+                element={
+                  <ProtectedRoute>
+                    <Cart />
                   </ProtectedRoute>
                 } 
               />

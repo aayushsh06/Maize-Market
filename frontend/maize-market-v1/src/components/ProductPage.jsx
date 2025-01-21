@@ -1,21 +1,33 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getProduct } from '../api/ProductService';
+import { db, ref, update, get, auth } from '../api/Firebase-config';
 import Loader from './Loader.jsx';
 import { UserContext } from './UserContext';
+import Notification from './Notification';
 import './ProductPage.css'
 
 const ProductPage = () => {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const { email } = useContext(UserContext);
+    const { email, user, isAuthenticated } = useContext(UserContext);
+    const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState('');
+    const [isVerificationNotice, setIsVerificationNotice] = useState(false);
+    const [isInCart, setIsInCart] = useState(false);
+    const navigate = useNavigate();
     
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 const response = await getProduct(productId);
                 setProduct(response.data);
+                if (user) {
+                    const cartRef = ref(db, `carts/${user.uid}/${productId}`);
+                    const snapshot = await get(cartRef);
+                    setIsInCart(snapshot.exists());
+                }
                 setLoading(false);
             }
             catch (e) {
@@ -23,14 +35,89 @@ const ProductPage = () => {
             }
         }
         fetchProduct();
-    }, [productId])
+    }, [productId, user])
+
+    const handleAddToCart = async () => {
+        const currentUser = auth.currentUser;
+        
+        if (!isAuthenticated) {
+            setIsVerificationNotice(false);
+            setNotificationMessage("You need to be logged in to add items to cart. Please sign in or create an account.");
+            setShowNotification(true);
+            return;
+        } 
+        
+        if (currentUser && !currentUser.emailVerified) {
+            setIsVerificationNotice(true);
+            setNotificationMessage("Please verify your email before adding items to cart. Check your inbox for the verification link.");
+            setShowNotification(true);
+            return;
+        }
+
+        try {
+            const cartUpdates = {
+                [`carts/${user.uid}/${product.id}`]: {
+                    dateAdded: new Date().toISOString()
+                }
+            };
+            await update(ref(db), cartUpdates);
+            setIsInCart(true);
+            setNotificationMessage("Added to cart!");
+            setShowNotification(true);
+            setTimeout(() => setShowNotification(false), 3000);
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+        }
+    };
+
+    const handleRemoveFromCart = async () => {
+        if (!user) return;
+
+        try {
+            const cartUpdates = {
+                [`carts/${user.uid}/${product.id}`]: null
+            };
+            await update(ref(db), cartUpdates);
+            setIsInCart(false);
+            setNotificationMessage("Removed from cart!");
+            setShowNotification(true);
+            setTimeout(() => setShowNotification(false), 3000);
+        } catch (error) {
+            console.error('Error removing from cart:', error);
+        }
+    };
+
+    const handleNotificationAction = () => {
+        setShowNotification(false);
+        navigate("/login");
+    };
 
     if (loading) {
-        return <Loader></Loader>
+        return <Loader />;
     }
     
     return (
         <div className="page-container">
+            {showNotification && (
+                isVerificationNotice || !isAuthenticated ? (
+                    <Notification 
+                        message={notificationMessage}
+                        type="error"
+                        buttonText="Login"
+                        onButtonClick={handleNotificationAction}
+                        onClose={() => setShowNotification(false)}
+                        showCancelButton={true}
+                        isVisible={showNotification}
+                    />
+                ) : (
+                    <Notification 
+                        message={notificationMessage}
+                        type="success"
+                        onClose={() => setShowNotification(false)}
+                        isVisible={showNotification}
+                    />
+                )
+            )}
             <div className="productPage-container" data-available={true}>
                 <div className="product-image-section">
                     <div className="image-wrapper" data-available={true}>
@@ -70,6 +157,12 @@ const ProductPage = () => {
                                 <span className="spec-value">{product.releaseDate}</span>
                             </div>
                         </div>
+                        <button 
+                            className={`cart-button ${isInCart ? 'remove' : 'add'}`}
+                            onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
+                        >
+                            {isInCart ? 'Remove from Cart' : 'Add to Cart'}
+                        </button>
                     </div>
 
                     <div className="seller-section">

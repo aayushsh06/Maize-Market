@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { UserContext } from './UserContext.jsx';
 import { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut, db, ref, update, get } from '../api/Firebase-config.js';
 import Loader from "./Loader.jsx";
 import { useNavigate } from 'react-router-dom';
+import Notification from './Notification';
+import './Login.css';
 
 const Login = () => {
   const { username, setUsername, setAuthentication, isAuthenticated, email, setEmail } = useContext(UserContext);
@@ -16,6 +17,7 @@ const Login = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -99,6 +101,7 @@ const Login = () => {
       alert("Verification email sent! Please check your inbox.")
     }
     catch (error) {
+      setShowError(true);
       setError(error.message);
     }
   }
@@ -133,7 +136,7 @@ const Login = () => {
 
     }
     catch (error) {
-      alert("Incorrect email or password");
+      setShowError(true);
       setError(error.message);
     }
 
@@ -141,13 +144,14 @@ const Login = () => {
 
 
   if (loading) {
-    return <Loader></Loader>
+    return <Loader />;
   }
 
 
   return (
-    <StyledWrapper>
-      <div className="wrapper">
+    <>
+      {showError && <Notification message="Incorrect email or password" type="error" />}
+      <div className="login-wrapper">
         <div className="auth-container">
           <div className="tab-switcher">
             <button 
@@ -188,156 +192,8 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </StyledWrapper>
+    </>
   );
 }
-
-const StyledWrapper = styled.div`
-  .wrapper {
-    --primary-color: #00274C;
-    --secondary-color: #FFCB05;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 85vh;
-    width: 100%;
-    padding: 20px;
-  }
-
-  .auth-container {
-    width: 100%;
-    max-width: 400px;
-    min-height: 450px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 39, 76, 0.08);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .tab-switcher {
-    display: flex;
-    width: 100%;
-    border-bottom: 1px solid rgba(0, 39, 76, 0.1);
-    flex-shrink: 0;
-  }
-
-  .tab-btn {
-    flex: 1;
-    padding: 16px;
-    font-size: 16px;
-    font-weight: 600;
-    background: none;
-    border: none;
-    color: #666;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-  }
-
-  .tab-btn.active {
-    color: var(--primary-color);
-  }
-
-  .tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: var(--primary-color);
-    border-radius: 3px 3px 0 0;
-  }
-
-  .form-container {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 40px 30px;
-  }
-
-  .form-section {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .title {
-    margin-bottom: 30px;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--primary-color);
-    text-align: center;
-  }
-
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .auth-input {
-    width: 100%;
-    height: 50px;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 39, 76, 0.2);
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 0 20px;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--primary-color);
-    transition: all 0.3s ease;
-  }
-
-  .auth-input::placeholder {
-    color: rgba(0, 39, 76, 0.5);
-  }
-
-  .auth-input:focus {
-    border: 2px solid var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(0, 39, 76, 0.1);
-    outline: none;
-  }
-
-  .auth-btn {
-    width: 100%;
-    height: 50px;
-    border-radius: 12px;
-    border: none;
-    background-color: var(--primary-color);
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-  }
-
-  .auth-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 39, 76, 0.2);
-    background-color: #001f3d;
-  }
-
-  .auth-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(0, 39, 76, 0.15);
-  }
-
-  @media (max-width: 480px) {
-    .auth-container {
-      max-width: 320px;
-      min-height: 430px;
-    }
-    
-    .form-container {
-      padding: 30px 20px;
-    }
-  }
-`;
 
 export default Login;

@@ -8,18 +8,21 @@ const UserProvider = ({children}) => {
     const [username, setUsername] = useState(null);
     const [email, setEmail] = useState(null);
     const [isAuthenticated, setAuthentication] = useState(false);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         // Check auth state on mount
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user && user.emailVerified) {
+        const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+            if (currentUser && currentUser.emailVerified) {
                 setAuthentication(true);
                 setEmail(localStorage.getItem('email'));
                 setUsername(localStorage.getItem('username'));
+                setUser(currentUser);
             } else {
                 setAuthentication(false);
                 setEmail(null);
                 setUsername(null);
+                setUser(null);
                 // Clear localStorage
                 localStorage.removeItem('username');
                 localStorage.removeItem('email');
@@ -31,10 +34,18 @@ const UserProvider = ({children}) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ username, setUsername, isAuthenticated, setAuthentication, email, setEmail }}>
+        <UserContext.Provider value={{ 
+            username, 
+            setUsername, 
+            isAuthenticated, 
+            setAuthentication, 
+            email, 
+            setEmail,
+            user
+        }}>
             {children}
         </UserContext.Provider>
     );
 }
 
-export {UserContext, UserProvider};
+export { UserContext, UserProvider };
