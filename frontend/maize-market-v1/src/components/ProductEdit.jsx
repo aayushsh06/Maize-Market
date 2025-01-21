@@ -5,7 +5,7 @@ import { auth } from '../api/Firebase-config.js';
 import Notification from './Notification';
 import './AddProduct.css';
 
-const ProductEdit = () => {
+const ProductEdit = ({ getAllMyProducts }) => {
     const navigate = useNavigate();
     const { productId } = useParams();
     const fileInputRef = useRef(null);
@@ -67,7 +67,8 @@ const ProductEdit = () => {
     const confirmDelete = async () => {
         try {
             await deleteProduct(productId);
-            navigate('/user');
+            await getAllMyProducts(0);
+            navigate('/user', { replace: true });
         } catch (error) {
             console.error(error);
         }

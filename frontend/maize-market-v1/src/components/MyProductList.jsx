@@ -8,7 +8,7 @@ const MyProductList = ({ data, currentPage, sellerEmail, getAllMyProducts }) => 
   };
 
   return (
-    <main className='main'>
+    <main className='my-products-main'>
       {data?.content?.length === 0 && <div>You Have No Products</div>}
 
       <ul className='product_list'>

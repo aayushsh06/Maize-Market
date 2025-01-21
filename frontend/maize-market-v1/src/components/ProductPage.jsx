@@ -157,12 +157,14 @@ const ProductPage = () => {
                                 <span className="spec-value">{product.releaseDate}</span>
                             </div>
                         </div>
-                        <button 
-                            className={`cart-button ${isInCart ? 'remove' : 'add'}`}
-                            onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
-                        >
-                            {isInCart ? 'Remove from Cart' : 'Add to Cart'}
-                        </button>
+                        {email !== product.sellerEmail && (
+                            <button 
+                                className={`cart-button ${isInCart ? 'remove' : 'add'}`}
+                                onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
+                            >
+                                {isInCart ? 'Remove from Cart' : 'Add to Cart'}
+                            </button>
+                        )}
                     </div>
 
                     <div className="seller-section">

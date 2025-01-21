@@ -19,7 +19,7 @@ const Notification = ({ message, isVisible, onClose, buttonText, onButtonClick, 
           </div>
         ) : (
           <button className="action-button single" onClick={onClose}>
-            {buttonText}
+            OK
           </button>
         )}
       </div>

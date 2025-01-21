@@ -1,0 +1,13 @@
+.my-products-main {
+    min-height: auto;
+    background: transparent;
+    padding-bottom: 2rem;
+}
+
+.my-products-main .product_list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 0;
+    list-style: none;
+} 

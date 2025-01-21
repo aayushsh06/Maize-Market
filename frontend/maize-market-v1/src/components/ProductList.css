@@ -1,17 +1,15 @@
-body, html {
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
+.main {
+    min-height: calc(100vh - 64px);
+    background: linear-gradient(135deg, #00274C 0%, #001324 100%);
+    padding-bottom: 2rem;
 }
 
 .products-container {
-    min-height: 100vh;
+    min-height: calc(100vh - 64px);
     background: linear-gradient(135deg, #00274C 0%, #001324 100%);
     padding: 2rem;
     padding-top: 80px;
     margin-top: 0;
-    margin-bottom: 0;
-    position: relative;
 }
 
 .products-header {

@@ -89,7 +89,7 @@ function App() {
                 path="/products/edit/:productId" 
                 element={
                   <ProtectedRoute>
-                    <ProductEdit />
+                    <ProductEdit getAllMyProducts={getAllProducts} />
                   </ProtectedRoute>
                 } 
               />
