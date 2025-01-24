@@ -18,6 +18,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationType, setNotificationType] = useState('');
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -81,8 +83,17 @@ const Login = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
+
+      if(!enteredEmail.includes("@umich.edu") || enteredEmail.includes(" ")) {
+        throw new Error("Please use a valid University of Michigan email address");
+      }
+      if(password.length < 8) {
+        throw new Error("Password must be at least 8 characters long");
+      }
+
       const userCredential = await createUserWithEmailAndPassword(auth, enteredEmail, password);
       const user = userCredential.user;
+
 
       setUsername(enteredUsername);
       localStorage.setItem('username', enteredUsername);
@@ -98,10 +109,24 @@ const Login = () => {
       setPassword('');
       setAuthentication(true);
 
-      alert("Verification email sent! Please check your inbox.")
+      alert("Verification email sent! Please check your inbox.");
     }
     catch (error) {
+      if(error.message.includes("auth/email-already-in-use")) {
+        error.message = "Email already in use";
+      }
+      else if(error.message.includes("auth/invalid-email")) {
+        error.message = "Please use a valid University of Michigan email address";
+      }
+      else if(error.message.includes("auth/weak-password")) {
+        error.message = "Password must be at least 8 characters long";
+      }
+      else {
+        error.message = "An unexpected error occured";
+      }
       setShowError(true);
+      setNotificationMessage(error.message);
+      setNotificationType('error');
       setError(error.message);
     }
   }
@@ -130,14 +155,15 @@ const Login = () => {
         setAuthentication(true);
       }
       else {
-        console.log("No user data found!");
-        alert("An unexpected error occured!")
+        throw new Error();
       }
 
     }
     catch (error) {
       setShowError(true);
-      setError(error.message);
+      setNotificationMessage("Incorrect email or password");
+      setNotificationType('error');
+      setError("Incorrect email or password");
     }
 
   }
@@ -150,7 +176,14 @@ const Login = () => {
 
   return (
     <>
-      {showError && <Notification message="Incorrect email or password" type="error" />}
+      {showError && <Notification 
+      message={notificationMessage} 
+      isVisible={showError}
+      onClose={() => setShowError(false)}
+      buttonText="OK"
+      showCancelButton={false}
+      onButtonClick={() => setShowError(false)}
+      />}
       <div className="login-wrapper">
         <div className="auth-container">
           <div className="tab-switcher">
