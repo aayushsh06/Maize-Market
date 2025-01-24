@@ -95,19 +95,21 @@ const Login = () => {
       const user = userCredential.user;
 
 
+      await createUserProfile(user);
+      await sendEmailVerification(user);
+
       setUsername(enteredUsername);
       localStorage.setItem('username', enteredUsername);
       setEmail(enteredEmail);
       localStorage.setItem('email', enteredEmail);
 
-      await createUserProfile(user);
 
-      await sendEmailVerification(user);
 
       setEnteredEmail('');
       setEnteredUsername('');
       setPassword('');
       setAuthentication(true);
+      localStorage.setItem('isAuthenticated', true);
 
       alert("Verification email sent! Please check your inbox.");
     }
@@ -153,6 +155,7 @@ const Login = () => {
         setEnteredEmail('');
         setPassword('');
         setAuthentication(true);
+        localStorage.setItem('isAuthenticated', true);
       }
       else {
         throw new Error();

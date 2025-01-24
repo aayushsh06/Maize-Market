@@ -74,7 +74,8 @@ const AddProduct = ({ getAllProducts }) => {
                 if (localStorage.getItem('isAuthenticated') === 'true') {
                     alert("Email not verified yet. Please check your inbox.");
                 } else {
-                    navigate('/login');
+                    //navigate('/login');
+                    console.log(localStorage.getItem('isAuthenticated'));
                     alert("Must Login to List a Product");
                 }
             }
