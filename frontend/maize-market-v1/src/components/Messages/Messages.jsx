@@ -1,27 +1,53 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { UserContext } from '../../contexts/UserContext';
+import { UserContext } from '../UserContext';
 import { ref, onValue, set, push, serverTimestamp } from 'firebase/database';
-import { db } from '../../firebase';
+import { db } from '../../api/Firebase-config.js';
 import MessageInput from './MessageInput';
+import './Messages.css';
+import RecipientInfo from './RecipientInfo';
 
 const Messages = () => {
+
     const { user, email } = useContext(UserContext);
     const [conversations, setConversations] = useState([]);
     const [activeChat, setActiveChat] = useState(null);
     const [messages, setMessages] = useState([]);
+
+
     
     useEffect(() => {
         if (!user) return;
         
-        // Listen to user's conversations
         const conversationsRef = ref(db, `conversations/${user.uid}`);
         onValue(conversationsRef, (snapshot) => {
-            if (snapshot.exists()) {
-                const conversationsData = snapshot.val();
-                setConversations(Object.values(conversationsData));
+            try {
+                if (snapshot.exists()) {
+                    const conversationsData = snapshot.val();
+                    setConversations(Object.values(conversationsData));
+                }
+            } catch (error) {
+                console.error("Error fetching conversations:", error);
             }
         });
     }, [user]);
+
+    useEffect(() => {
+        if (!activeChat) return;
+
+        const messagesRef = ref(db, `messages/${activeChat.id}`);
+        onValue(messagesRef, (snapshot) => {
+            try {
+                if (snapshot.exists()) {
+                    const messagesData = snapshot.val();
+                    setMessages(Object.values(messagesData));
+                } else {
+                    setMessages([]); 
+                }
+            } catch (error) {
+                console.error("Error fetching messages:", error);
+            }
+        });
+    }, [activeChat]);
 
     const sendMessage = async (text) => {
         if (!activeChat || !text.trim()) return;
@@ -33,15 +59,22 @@ const Messages = () => {
             timestamp: serverTimestamp(),
         };
 
-        // Add message to the conversation
         const messageRef = ref(db, `messages/${activeChat.id}`);
         const newMessageRef = push(messageRef);
-        await set(newMessageRef, messageData);
+        try {
+            await set(newMessageRef, messageData);
+        } catch (error) {
+            console.error("Error sending message:", error);
+        }
     };
 
+
     return (
+        <>
         <div className="messages-container">
             <div className="conversations-sidebar">
+            <h3>Conversations</h3>
+            <RecipientInfo />
                 {conversations.map(conv => (
                     <div 
                         key={conv.id} 
@@ -57,6 +90,10 @@ const Messages = () => {
             </div>
             
             <div className="chat-area">
+                <h3>Chat</h3>
+                <div className='message'>
+                    <p>Hello</p>
+                </div>
                 {activeChat ? (
                     <>
                         <div className="messages-list">
@@ -73,11 +110,13 @@ const Messages = () => {
                     </>
                 ) : (
                     <div className="no-chat-selected">
-                        Select a conversation to start messaging
+                        
                     </div>
                 )}
+                <MessageInput onSend={sendMessage} />
             </div>
         </div>
+        </>
     );
 };
 

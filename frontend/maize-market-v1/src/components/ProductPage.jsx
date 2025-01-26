@@ -92,6 +92,10 @@ const ProductPage = () => {
         navigate("/login");
     };
 
+    const handleMessageClick = () => {
+        console.log("Message button clicked");
+    };
+
     if (loading) {
         return <Loader />;
     }
@@ -165,6 +169,9 @@ const ProductPage = () => {
                                 >
                                     {isInCart ? 'Remove from Cart' : 'Add to Cart'}
                                 </button>
+                                <Link to="/messages">
+                                    <button className="message-button" onClick={handleMessageClick}>Message Seller</button>
+                                </Link>
                             </>
                         )}
                     </div>

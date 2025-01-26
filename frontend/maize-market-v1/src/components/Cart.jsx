@@ -7,6 +7,7 @@ import Notification from './Notification'
 import Product from './Product'
 import './ProductList.css'
 import { FaShoppingCart } from 'react-icons/fa'
+import CustomLoader from './Loader'
 
 const Cart = () => {
   const { isAuthenticated, user } = useContext(UserContext);
@@ -49,6 +50,7 @@ const Cart = () => {
     const currentUser = auth.currentUser;
     if (!isAuthenticated || (currentUser && !currentUser.emailVerified)) {
       setShowNotification(true);
+      setLoading(false);
     } else {
       fetchCartProducts();
     }
@@ -60,7 +62,7 @@ const Cart = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <CustomLoader />;
   }
 
   return (

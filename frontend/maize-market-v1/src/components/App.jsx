@@ -13,6 +13,8 @@ import ProductPage from './ProductPage.jsx';
 import AddProduct from './AddProduct.jsx';
 import ProductEdit from './ProductEdit.jsx';
 import Cart from './Cart.jsx';
+import Messages from './Messages/Messages.jsx';
+import CustomLoader from './Loader';
 
 function App() {
   const { isAuthenticated } = useContext(UserContext);
@@ -20,6 +22,7 @@ function App() {
   const location = useLocation();
   const [data, setData] = useState({content:[], totalElements:0});
   const [currentPage, setCurrentPage] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const getAllProducts = async (page = 0, size = 10) => {
     try {
@@ -32,20 +35,24 @@ function App() {
   }
 
   useEffect(() => {
+    const checkAuth = async () => {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      setLoading(false);
+    };
+    checkAuth();
     getAllProducts();
   }, []);
 
-  // Add authentication check
   const ProtectedRoute = ({ children }) => {
-    if (!isAuthenticated) {
+    if (loading) return <CustomLoader />;
+    if (!localStorage.getItem('isAuthenticated')) {
       return <Navigate to="/login" replace />;
     }
     return children;
   };
 
-  // Add public route check (for login page)
   const PublicRoute = ({ children }) => {
-    if (isAuthenticated) {
+    if (localStorage.getItem('isAuthenticated')) {
       return <Navigate to="/user" replace />;
     }
     return children;
@@ -84,7 +91,10 @@ function App() {
                   </ProtectedRoute>
                 } 
               />
-              <Route path="/products/:productId" element={<ProductPage/>}/>
+              <Route 
+                path="/products/:productId" 
+                element={<ProductPage/>}
+              />
               <Route 
                 path="/products/edit/:productId" 
                 element={
@@ -98,6 +108,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Cart />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/messages" 
+                element={
+                  <ProtectedRoute>
+                    <Messages />
                   </ProtectedRoute>
                 } 
               />

@@ -32,7 +32,7 @@ const StyledWrapper = styled.div`
   justify-content: center;
   height: 75vh; /* Full viewport height */
   width: 100vw; /* Full viewport width */
-  background-color: #f8f8f8; /* Optional: Add a background color */
+  background-color: transparent; /* Set background to transparent */
 
   .loader {
     display: flex;
@@ -174,6 +174,5 @@ const StyledWrapper = styled.div`
     }
   }
 `;
-
 
 export default Loader;
