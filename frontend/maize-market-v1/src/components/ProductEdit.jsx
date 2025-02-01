@@ -142,7 +142,7 @@ const ProductEdit = ({ getAllMyProducts }) => {
                                         type="number" 
                                         name="price" 
                                         required 
-                                        step="0.01"
+                                        step="0.50"
                                         min="0"
                                         value={values.price} 
                                         onChange={handleInputChange} 

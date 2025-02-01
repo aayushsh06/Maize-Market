@@ -14,10 +14,10 @@ const Messages = () => {
     const [messages, setMessages] = useState([]);
 
 
-    
+
     useEffect(() => {
         if (!user) return;
-        
+
         const conversationsRef = ref(db, `conversations/${user.uid}`);
         onValue(conversationsRef, (snapshot) => {
             try {
@@ -41,7 +41,7 @@ const Messages = () => {
                     const messagesData = snapshot.val();
                     setMessages(Object.values(messagesData));
                 } else {
-                    setMessages([]); 
+                    setMessages([]);
                 }
             } catch (error) {
                 console.error("Error fetching messages:", error);
@@ -51,7 +51,7 @@ const Messages = () => {
 
     const sendMessage = async (text) => {
         if (!activeChat || !text.trim()) return;
-        
+
         const messageData = {
             senderId: user.uid,
             senderEmail: email,
@@ -71,51 +71,76 @@ const Messages = () => {
 
     return (
         <>
-        <div className="messages-container">
-            <div className="conversations-sidebar">
-            <h3>Conversations</h3>
-            <RecipientInfo />
-                {conversations.map(conv => (
-                    <div 
-                        key={conv.id} 
-                        className={`conversation ${activeChat?.id === conv.id ? 'active' : ''}`}
-                        onClick={() => setActiveChat(conv)}
-                    >
-                        <div className="conversation-info">
-                            <span>{conv.otherUserEmail}</span>
-                            <p>{conv.lastMessage}</p>
+            <div className="messages-container">
+                <div className="conversations-sidebar">
+                    <h3>Conversations</h3>
+                    <RecipientInfo />
+                    {conversations.map(conv => (
+                        <div
+                            key={conv.id}
+                            className={`conversation ${activeChat?.id === conv.id ? 'active' : ''}`}
+                            onClick={() => setActiveChat(conv)}
+                        >
+                            <div className="conversation-info">
+                                <span>{conv.otherUserEmail}</span>
+                                <p>{conv.lastMessage}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
-            
-            <div className="chat-area">
-                <h3>Chat</h3>
-                <div className='message'>
-                    <p>Hello</p>
+                    ))}
                 </div>
-                {activeChat ? (
-                    <>
-                        <div className="messages-list">
-                            {messages.map(msg => (
-                                <div 
-                                    key={msg.id}
-                                    className={`message ${msg.senderId === user.uid ? 'sent' : 'received'}`}
-                                >
-                                    {msg.text}
-                                </div>
-                            ))}
+
+                <div className="chat-area">
+                    <div className='recipient-container'>
+                        <div className='circle-icon'>
+                            J
                         </div>
-                        <MessageInput onSend={sendMessage} />
-                    </>
-                ) : (
-                    <div className="no-chat-selected">
+                        <span className='recipient-name'>John Doe</span>
+                    </div>
+
+                    <div className='messages-list'>
+                        <div className='message-container'>
+                            <div className='circle-icon'>
+                                J
+                            </div>
+                            <div className='message-text'>
+                                <p>Hello</p>
+                            </div>
+                            <span className='message-time'>12:00 PM</span>
+                        </div>
+                        <div className='message-container-self'>
+                            <div className='circle-icon'>
+                                A
+                            </div>
+                            <div className='message-text-self'>
+                                <p>Hey</p>
+                            </div>
+                            <span className='message-time'>12:01 PM</span>
+                        </div>
+
                         
                     </div>
-                )}
-                <MessageInput onSend={sendMessage} />
+                    {activeChat ? (
+                        <>
+                            <div className="messages-list">
+                                {messages.map(msg => (
+                                    <div
+                                        key={msg.id}
+                                        className={`message ${msg.senderId === user.uid ? 'sent' : 'received'}`}
+                                    >
+                                        {msg.text}
+                                    </div>
+                                ))}
+                            </div>
+                            <MessageInput onSend={sendMessage} />
+                        </>
+                    ) : (
+                        <div className="no-chat-selected">
+
+                        </div>
+                    )}
+                    <MessageInput onSend={sendMessage} />
+                </div>
             </div>
-        </div>
         </>
     );
 };

@@ -6,7 +6,9 @@ const RecipientInfo = () => {
   return (
     <div className="user-info">
       <div className='user'>
-        <FontAwesomeIcon icon={faUser} size="2x" />
+        <div className='circle-icon'>
+          J
+        </div>
         <h2>John Doe</h2>
       </div>
       <div className='user'>
