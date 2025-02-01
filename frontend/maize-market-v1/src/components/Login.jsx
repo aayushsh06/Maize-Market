@@ -15,7 +15,6 @@ const Login = () => {
   const [loading, setLoading] = useState(true); 
   const [data, setData] = useState({ content: [], totalElements: 0 });
   const [currentPage, setCurrentPage] = useState(0);
-  const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [showError, setShowError] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
@@ -59,6 +58,13 @@ const Login = () => {
         email: enteredEmail,
         createdAt: new Date().toISOString()
       });
+
+      const chatRef = ref(db, "chats/" + user.uid);
+      await update(chatRef, {
+        messages: [],
+        createdAt: new Date().toISOString()
+      });
+      
       console.log("User Profile Created")
     }
     catch (error) {

@@ -18,7 +18,7 @@
 .product_image {
     position: relative;
     width: 100%;
-    padding-top: 75%; /* Changed to 4:3 aspect ratio (standard landscape phone photo) */
+    padding-top: 75%; 
     background-color: #f8f9fa;
     overflow: hidden;
 }
@@ -29,8 +29,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Changed to contain to show full image */
-    background-color: #f8f9fa; /* Light background for any empty space */
+    object-fit: contain; 
+    background-color: #f8f9fa; 
     transition: transform 0.3s ease;
 }
 

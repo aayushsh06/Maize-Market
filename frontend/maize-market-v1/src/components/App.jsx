@@ -45,14 +45,14 @@ function App() {
 
   const ProtectedRoute = ({ children }) => {
     if (loading) return <CustomLoader />;
-    if (!localStorage.getItem('isAuthenticated')) {
+    if (localStorage.getItem('isAuthenticated') == 'false') {
       return <Navigate to="/login" replace />;
     }
     return children;
   };
 
   const PublicRoute = ({ children }) => {
-    if (localStorage.getItem('isAuthenticated')) {
+    if (localStorage.getItem('isAuthenticated') == 'true') {
       return <Navigate to="/user" replace />;
     }
     return children;

@@ -12,21 +12,24 @@ const UserInfo = () => {
     const [data, setData] = useState({content:[],totalElements:0});
     const [currentPage, setCurrentPage] = useState(0);
     const navigate = useNavigate();
+    const [error, setError] = useState('');
+
     const handleSignOut = async (e) => {
+        e.preventDefault(); 
         try {
             await signOut(auth);
+
             setUsername('');
-            localStorage.removeItem('username')
+            localStorage.removeItem('username');
             setEmail('');
             localStorage.removeItem('email');
             setAuthentication(false);
             localStorage.setItem('isAuthenticated', false);
-            navigate("/login")
-        }
-        catch (error) {
+            navigate("/login");
+        } catch (error) {
+            console.error("Error during sign out:", error);
             setError(error.message);
         }
-
     }
 
     const getAllMyProducts = async (page = 0, size = 10) => {
