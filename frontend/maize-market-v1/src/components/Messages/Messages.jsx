@@ -103,21 +103,22 @@ const Messages = () => {
                                 J
                             </div>
                             <div className='message-text'>
-                                <p>Hello</p>
+                                <p className='message-content'>Hellofjsfksdjfkdsjkfjsdkfjadsfkajfk
+                                    jsfhdasjhfjdsfjdskhfjdshfjkdshjfkhadsjfhjasdfh
+                                    sdjfhjdsfhdjsafdsjfhsdjfsj
+                                </p>
+                                <span className='message-time'>12:00 PM</span>
                             </div>
-                            <span className='message-time'>12:00 PM</span>
                         </div>
                         <div className='message-container-self'>
                             <div className='circle-icon'>
                                 A
                             </div>
                             <div className='message-text-self'>
-                                <p>Hey</p>
+                                <p className='message-content'>Hey</p>
+                                <span className='message-time'>12:01 PM</span>
                             </div>
-                            <span className='message-time'>12:01 PM</span>
                         </div>
-
-                        
                     </div>
                     {activeChat ? (
                         <>
