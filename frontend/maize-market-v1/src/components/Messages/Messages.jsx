@@ -111,9 +111,6 @@ const Messages = () => {
                             </div>
                         </div>
                         <div className='message-container-self'>
-                            <div className='circle-icon'>
-                                A
-                            </div>
                             <div className='message-text-self'>
                                 <p className='message-content'>Hey</p>
                                 <span className='message-time'>12:01 PM</span>

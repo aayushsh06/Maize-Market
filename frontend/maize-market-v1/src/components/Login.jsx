@@ -89,14 +89,12 @@ const Login = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-
       if(!enteredEmail.includes("@umich.edu") || enteredEmail.includes(" ")) {
         throw new Error("Please use a valid University of Michigan email address");
       }
       if(password.length < 8) {
         throw new Error("Password must be at least 8 characters long");
       }
-
       const userCredential = await createUserWithEmailAndPassword(auth, enteredEmail, password);
       const user = userCredential.user;
 
@@ -128,6 +126,12 @@ const Login = () => {
       }
       else if(error.message.includes("auth/weak-password")) {
         error.message = "Password must be at least 8 characters long";
+      }
+      else if(error.message.includes("8 characters long")){
+        error.message = "Password must be at least 8 characters long";
+      }
+      else if(error.message.includes("University of Michigan")){
+        error.message = "Please use a valid University of Michigan email address";
       }
       else {
         error.message = "An unexpected error occured";
