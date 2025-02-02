@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getProduct } from '../api/ProductService';
-import { db, ref, update, get, auth } from '../api/Firebase-config';
+import { db, ref, update, get, auth, set } from '../api/Firebase-config';
 import Loader from './Loader.jsx';
 import { UserContext } from './UserContext';
 import Notification from './Notification';
@@ -92,8 +92,60 @@ const ProductPage = () => {
         navigate("/login");
     };
 
-    const handleMessageClick = () => {
-        console.log("Message button clicked");
+    const handleMessageClick = async () => {
+        if (!user) {
+            console.log("User not logged in");
+            return;
+        }
+
+        try {
+            // Assuming the seller's email is stored in product.sellerEmail
+            const sellerEmail = product.sellerEmail;
+
+            // Fetch the seller's user ID from Firebase using their email
+            const sellerRef = ref(db, `users`);
+            const snapshot = await get(sellerRef);
+            let sellerId = null;
+
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (const id in users) {
+                    if (users[id].email === sellerEmail) {
+                        sellerId = id;
+                        break;
+                    }
+                }
+            }
+
+            if (sellerId) {
+                // Check if a chat already exists
+                const chatRef = ref(db, `conversations/${user.uid}`);
+                const chatSnapshot = await get(chatRef);
+                let chatExists = false;
+
+                if (chatSnapshot.exists()) {
+                    const conversations = chatSnapshot.val();
+                    chatExists = Object.values(conversations).some(conv => conv.otherUserEmail === sellerEmail);
+                }
+
+                if (!chatExists) {
+                    // Create a new chat entry
+                    const newChatRef = ref(db, `conversations/${user.uid}/${sellerId}`);
+                    await set(newChatRef, {
+                        otherUserEmail: sellerEmail,
+                        lastMessage: '',
+                        createdAt: new Date().toISOString()
+                    });
+                }
+
+                // Navigate to the messages page
+                navigate("/messages");
+            } else {
+                console.log("Seller not found");
+            }
+        } catch (error) {
+            console.error("Error opening chat:", error);
+        }
     };
 
     if (loading) {

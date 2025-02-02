@@ -75,18 +75,21 @@ const Messages = () => {
                 <div className="conversations-sidebar">
                     <h3>Conversations</h3>
                     <RecipientInfo />
-                    {conversations.map(conv => (
-                        <div
-                            key={conv.id}
-                            className={`conversation ${activeChat?.id === conv.id ? 'active' : ''}`}
-                            onClick={() => setActiveChat(conv)}
-                        >
-                            <div className="conversation-info">
-                                <span>{conv.otherUserEmail}</span>
-                                <p>{conv.lastMessage}</p>
+                    {conversations.map((conv, index) => {
+                        console.log(conv);
+                        return (
+                            <div
+                                key={conv.id || `${conv.otherUserEmail}-${index}`}
+                                className={`conversation ${activeChat?.id === conv.id ? 'active' : ''}`}
+                                onClick={() => setActiveChat(conv)}
+                            >
+                                <div className="conversation-info">
+                                    <span>{conv.otherUserEmail}</span>
+                                    <p>{conv.lastMessage}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 <div className="chat-area">

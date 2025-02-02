@@ -11,7 +11,7 @@ const UserProvider = ({children}) => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        // Check auth state on mount
+        
         const unsubscribe = auth.onAuthStateChanged((currentUser) => {
             if (currentUser && currentUser.emailVerified) {
                 setAuthentication(true);
@@ -23,7 +23,7 @@ const UserProvider = ({children}) => {
                 setEmail(null);
                 setUsername(null);
                 setUser(null);
-                // Clear localStorage
+                
                 localStorage.removeItem('username');
                 localStorage.removeItem('email');
                 localStorage.removeItem('isAuthenticated');
