@@ -4,7 +4,7 @@ import { ref, onValue, set, push, serverTimestamp } from 'firebase/database';
 import { db } from '../../api/Firebase-config.js';
 import MessageInput from './MessageInput';
 import './Messages.css';
-import RecipientInfo from './RecipientInfo';
+import Notification from '../Notification';
 
 const Messages = () => {
 
@@ -12,8 +12,12 @@ const Messages = () => {
     const [conversations, setConversations] = useState([]);
     const [activeChat, setActiveChat] = useState(null);
     const [messages, setMessages] = useState([]);
+    const [notificationVisible, setNotificationVisible] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState('');
 
     const messagesEndRef = useRef(null);
+
+    
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -57,6 +61,24 @@ const Messages = () => {
         });
     }, [activeChat]);
 
+   
+    const openChatWithSeller = (sellerId) => {
+        const selectedConversation = conversations.find(conv => conv.otherUserEmail === sellerId);
+        if (selectedConversation) {
+            setActiveChat(selectedConversation);
+            localStorage.removeItem('selectedSellerEmail');
+        } else {
+            return <Notification message="An Error Occurred." isVisible={true} onClose={() => {}} buttonText="OK" showCancelButton={false} />
+        }
+    };
+
+    useEffect(() => {
+        const selectedSellerId = localStorage.getItem('selectedSellerEmail');
+        if (selectedSellerId) {
+            openChatWithSeller(selectedSellerId);
+        }
+    }, [conversations]);
+
     const sendMessage = async (text) => {
         if (!activeChat || !text.trim()) return;
 
@@ -72,13 +94,23 @@ const Messages = () => {
         try {
             await set(newMessageRef, messageData);
         } catch (error) {
-            console.error("Error sending message:", error);
+            return <Notification message="An Error Occurred." isVisible={true} onClose={() => {}} buttonText="OK" showCancelButton={false} />
         }
     };
 
+    const handleCloseNotification = () => {
+        setNotificationVisible(false);
+    };
 
     return (
         <>
+            <Notification 
+                message={notificationMessage} 
+                isVisible={notificationVisible} 
+                onClose={handleCloseNotification} 
+                buttonText="OK" 
+                showCancelButton={false} 
+            />
             <div className="messages-container">
                 <div className="conversations-sidebar">
                     <h3 className="conversations-title">Conversations</h3>
@@ -136,7 +168,7 @@ const Messages = () => {
                         </>
                     ) : (
                         <div className="no-chat-selected">
-
+                            <h2>Select A Chat To Start Messaging</h2>
                         </div>
                     )}
                     <MessageInput onSend={sendMessage} />

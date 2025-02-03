@@ -99,10 +99,8 @@ const ProductPage = () => {
         }
 
         try {
-            // Assuming the seller's email is stored in product.sellerEmail
             const sellerEmail = product.sellerEmail;
 
-            // Fetch the seller's user ID from Firebase using their email
             const sellerRef = ref(db, `users`);
             const snapshot = await get(sellerRef);
             let sellerId = null;
@@ -117,8 +115,9 @@ const ProductPage = () => {
                 }
             }
 
-            if (sellerId) {
-                // Check if a chat already exists
+            if (sellerId) { 
+                localStorage.setItem('selectedSellerEmail', product.sellerEmail);
+
                 const chatRef = ref(db, `conversations/${user.uid}`);
                 const chatSnapshot = await get(chatRef);
                 let chatExists = false;
@@ -129,7 +128,6 @@ const ProductPage = () => {
                 }
 
                 if (!chatExists) {
-                    // Create a new chat entry
                     const newChatRef = ref(db, `conversations/${user.uid}/${sellerId}`);
                     await set(newChatRef, {
                         otherUserEmail: sellerEmail,
@@ -138,10 +136,16 @@ const ProductPage = () => {
                     });
                 }
 
-                // Navigate to the messages page
                 navigate("/messages");
             } else {
-                console.log("Seller not found");
+                return (
+                    <Notification 
+                        message="Seller not found. Please try again later."
+                        type="error"
+                        onClose={() => setShowNotification(false)}
+                        isVisible={true}
+                    />
+                );
             }
         } catch (error) {
             console.error("Error opening chat:", error);
@@ -221,9 +225,9 @@ const ProductPage = () => {
                                 >
                                     {isInCart ? 'Remove from Cart' : 'Add to Cart'}
                                 </button>
-                                <Link to="/messages">
-                                    <button className="message-button" onClick={handleMessageClick}>Message Seller</button>
-                                </Link>
+                                <button className="message-button" onClick={() => { handleMessageClick(); navigate("/messages"); }}>
+                                    Message Seller
+                                </button>
                             </>
                         )}
                     </div>

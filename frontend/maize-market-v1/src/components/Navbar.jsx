@@ -59,6 +59,10 @@ const Navbar = ({toggleModal}) => {
     }
   };
 
+  const handleMessagesClick = () => {
+    navigate("/messages");
+  }
+
   return (
     <nav className="navbar">
       <div className="nav-logo" onClick={handleHomeClick}>
@@ -85,6 +89,11 @@ const Navbar = ({toggleModal}) => {
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
           </svg>
           Cart
+        </button>
+
+        <button className="nav-link" onClick={handleMessagesClick}>
+          <i className='bi bi-chat-dots'></i>
+          Messages
         </button>
         
         <button className="nav-link" onClick={handleUserClick}>

@@ -374,4 +374,33 @@
 .edit-product-button:active {
     transform: translateY(0);
 }
+
+.message-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #00274C;
+    color: #FFCB05;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    transition: all 0.2s ease;
+    border: 2px solid #00274C;
+    text-align: center;
+    width: fit-content;
+    gap: 0.5rem;
+}
+
+.message-button::before {
+    content: "💬";
+    font-size: 1.2rem;
+}
+
+.message-button:hover {
+    background-color: #FFCB05;
+    color: #00274C;
+    border-color: #FFCB05;
+}
   
