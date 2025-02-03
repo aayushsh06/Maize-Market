@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { UserContext } from '../UserContext';
 import { ref, onValue, set, push, serverTimestamp } from 'firebase/database';
 import { db } from '../../api/Firebase-config.js';
@@ -13,7 +13,15 @@ const Messages = () => {
     const [activeChat, setActiveChat] = useState(null);
     const [messages, setMessages] = useState([]);
 
+    const messagesEndRef = useRef(null);
 
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     useEffect(() => {
         if (!user) return;
@@ -74,9 +82,8 @@ const Messages = () => {
             <div className="messages-container">
                 <div className="conversations-sidebar">
                     <h3>Conversations</h3>
-                    <RecipientInfo />
+                    
                     {conversations.map((conv, index) => {
-                        console.log(conv);
                         return (
                             <div
                                 key={conv.id || `${conv.otherUserEmail}-${index}`}
@@ -94,43 +101,32 @@ const Messages = () => {
 
                 <div className="chat-area">
                     <div className='recipient-container'>
-                        <div className='circle-icon'>
-                            J
-                        </div>
-                        <span className='recipient-name'>John Doe</span>
+                        {activeChat ? <div className='circle-icon'>{activeChat.otherUserEmail.charAt(0).toUpperCase()}</div> : <></>}
+                        <span className='recipient-name'>
+                            {activeChat ? activeChat.otherUserEmail : 'Select a chat'}
+                        </span>
                     </div>
 
-                    <div className='messages-list'>
-                        <div className='message-container'>
-                            <div className='circle-icon'>
-                                J
-                            </div>
-                            <div className='message-text'>
-                                <p className='message-content'>Hellofjsfksdjfkdsjkfjsdkfjadsfkajfk
-                                    jsfhdasjhfjdsfjdskhfjdshfjkdshjfkhadsjfhjasdfh
-                                    sdjfhjdsfhdjsafdsjfhsdjfsj
-                                </p>
-                                <span className='message-time'>12:00 PM</span>
-                            </div>
-                        </div>
-                        <div className='message-container-self'>
-                            <div className='message-text-self'>
-                                <p className='message-content'>Hey</p>
-                                <span className='message-time'>12:01 PM</span>
-                            </div>
-                        </div>
-                    </div>
                     {activeChat ? (
                         <>
                             <div className="messages-list">
                                 {messages.map(msg => (
                                     <div
-                                        key={msg.id}
-                                        className={`message ${msg.senderId === user.uid ? 'sent' : 'received'}`}
+                                        key={msg.id || msg.timestamp}
+                                        className={`message-container ${msg.senderId === user.uid ? 'message-container-self' : ''}`}
                                     >
-                                        {msg.text}
+                                        {msg.senderId !== user.uid && (
+                                            <div className='circle-icon'>
+                                                {msg.senderEmail.charAt(0).toUpperCase()}
+                                            </div>
+                                        )}
+                                        <div className={`message-text ${msg.senderId === user.uid ? 'message-text-self' : ''}`}>
+                                            <p className='message-content'>{msg.text}</p>
+                                            <span className='message-time'>{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                        </div>
                                     </div>
                                 ))}
+                                <div ref={messagesEndRef} />
                             </div>
                             <MessageInput onSend={sendMessage} />
                         </>
