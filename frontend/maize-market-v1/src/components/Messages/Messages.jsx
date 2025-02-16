@@ -146,23 +146,32 @@ const Messages = () => {
                     {activeChat ? (
                         <>
                             <div className="messages-list">
-                                {messages.map(msg => (
-                                    <div
-                                        key={msg.id || msg.timestamp}
-                                        className={`message-container ${msg.senderId === user.uid ? 'message-container-self' : ''}`}
-                                    >
-                                        {msg.senderId !== user.uid && (
-                                            <div className='circle-icon'>
-                                                {msg.senderEmail.charAt(0).toUpperCase()}
-                                            </div>
-                                        )}
-                                        <div className={`message-text ${msg.senderId === user.uid ? 'message-text-self' : ''}`}>
-                                            <p className='message-content'>{msg.text}</p>
-                                            <span className='message-time'>{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                                        </div>
+                            {messages.map((msg, index) => {
+                                const isLastFromSender =
+                                index === messages.length - 1 || messages[index + 1].senderId !== msg.senderId;
+
+                                return (
+                                <div
+                                    key={msg.id || msg.timestamp}
+                                    className={`message-container ${msg.senderId === user.uid ? 'message-container-self' : ''}`}
+                                >
+                                    {msg.senderId !== user.uid && (
+                                    <div className='circle-icon'>
+                                        {msg.senderEmail.charAt(0).toUpperCase()}
                                     </div>
-                                ))}
-                                <div ref={messagesEndRef} />
+                                    )}
+                                    <div className={`message-text ${msg.senderId === user.uid ? 'message-text-self' : ''}`}>
+                                    <p className='message-content'>{msg.text}</p>
+                                    {isLastFromSender && (
+                                        <span className='message-time'>
+                                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    )}
+                                    </div>
+                                </div>
+                                );
+                            })}
+                            <div ref={messagesEndRef} />
                             </div>
                             <MessageInput onSend={sendMessage} />
                         </>
