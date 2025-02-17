@@ -5,6 +5,8 @@ import { db } from '../../api/Firebase-config.js';
 import MessageInput from './MessageInput';
 import './Messages.css';
 import Notification from '../Notification';
+import { getMyProducts } from '../../api/ProductService.js';
+import MyProductList from '../MyProductList.jsx';
 
 const Messages = () => {
 
@@ -14,6 +16,9 @@ const Messages = () => {
     const [messages, setMessages] = useState([]);
     const [notificationVisible, setNotificationVisible] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState('');
+    const [data, setData] = useState({content:[],totalElements:0});
+    const [currentPage] = useState(0);
+    const [selectedSellerId, setSelectedSellerId] = useState(null);
 
     const messagesEndRef = useRef(null);
 
@@ -65,6 +70,7 @@ const Messages = () => {
     const openChatWithSeller = (sellerId) => {
         const selectedConversation = conversations.find(conv => conv.otherUserEmail === sellerId);
         if (selectedConversation) {
+            setSelectedSellerId(sellerId);
             setActiveChat(selectedConversation);
             localStorage.removeItem('selectedSellerEmail');
         } else {
@@ -73,7 +79,8 @@ const Messages = () => {
     };
 
     useEffect(() => {
-        const selectedSellerId = localStorage.getItem('selectedSellerEmail');
+        setSelectedSellerId(localStorage.getItem('selectedSellerEmail'));
+        console.log(selectedSellerId);
         if (selectedSellerId) {
             openChatWithSeller(selectedSellerId);
         }
@@ -97,6 +104,22 @@ const Messages = () => {
             return <Notification message="An Error Occurred." isVisible={true} onClose={() => {}} buttonText="OK" showCancelButton={false} />
         }
     };
+
+
+    const getAllMyProducts = async (page = 0, size = 10) => {
+        try {
+            const { data } = await getMyProducts(page, size, selectedSellerId);
+            setData(data);
+
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getAllMyProducts(currentPage);
+    },[selectedSellerId])
 
     const handleCloseNotification = () => {
         setNotificationVisible(false);
@@ -183,6 +206,13 @@ const Messages = () => {
                     <MessageInput onSend={sendMessage} />
                 </div>
             </div>
+
+            <MyProductList 
+                data={data} 
+                currentPage={currentPage} 
+                sellerEmail={selectedSellerId} 
+                getMyProducts={getAllMyProducts} 
+            />
         </>
     );
 };
