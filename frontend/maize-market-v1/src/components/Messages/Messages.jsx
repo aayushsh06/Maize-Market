@@ -16,13 +16,13 @@ const Messages = () => {
     const [messages, setMessages] = useState([]);
     const [notificationVisible, setNotificationVisible] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState('');
-    const [data, setData] = useState({content:[],totalElements:0});
+    const [data, setData] = useState({ content: [], totalElements: 0 });
     const [currentPage] = useState(0);
     const [selectedSellerId, setSelectedSellerId] = useState(null);
 
     const messagesEndRef = useRef(null);
 
-    
+
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -66,7 +66,7 @@ const Messages = () => {
         });
     }, [activeChat]);
 
-   
+
     const openChatWithSeller = (sellerId) => {
         const selectedConversation = conversations.find(conv => conv.otherUserEmail === sellerId);
         if (selectedConversation) {
@@ -74,17 +74,18 @@ const Messages = () => {
             setActiveChat(selectedConversation);
             localStorage.removeItem('selectedSellerEmail');
         } else {
-            return <Notification message="An Error Occurred." isVisible={true} onClose={() => {}} buttonText="OK" showCancelButton={false} />
+            return <Notification message="An Error Occurred." isVisible={true} onClose={() => { }} buttonText="OK" showCancelButton={false} />
         }
     };
 
     useEffect(() => {
-        setSelectedSellerId(localStorage.getItem('selectedSellerEmail'));
-        console.log(selectedSellerId);
-        if (selectedSellerId) {
-            openChatWithSeller(selectedSellerId);
+        if (activeChat) {
+            setSelectedSellerId(activeChat.otherUserEmail);
+            if (selectedSellerId) {
+                openChatWithSeller(selectedSellerId);
+            }
         }
-    }, [conversations]);
+    }, [activeChat]);
 
     const sendMessage = async (text) => {
         if (!activeChat || !text.trim()) return;
@@ -101,16 +102,17 @@ const Messages = () => {
         try {
             await set(newMessageRef, messageData);
         } catch (error) {
-            return <Notification message="An Error Occurred." isVisible={true} onClose={() => {}} buttonText="OK" showCancelButton={false} />
+            return <Notification message="An Error Occurred." isVisible={true} onClose={() => { }} buttonText="OK" showCancelButton={false} />
         }
     };
 
 
     const getAllMyProducts = async (page = 0, size = 10) => {
         try {
-            const { data } = await getMyProducts(page, size, selectedSellerId);
-            setData(data);
-
+            if (activeChat) {
+                const { data } = await getMyProducts(page, size, activeChat.otherUserEmail);
+                setData(data);
+            }
         }
         catch (error) {
             console.log(error);
@@ -119,7 +121,7 @@ const Messages = () => {
 
     useEffect(() => {
         getAllMyProducts(currentPage);
-    },[selectedSellerId])
+    }, [selectedSellerId])
 
     const handleCloseNotification = () => {
         setNotificationVisible(false);
@@ -127,17 +129,17 @@ const Messages = () => {
 
     return (
         <>
-            <Notification 
-                message={notificationMessage} 
-                isVisible={notificationVisible} 
-                onClose={handleCloseNotification} 
-                buttonText="OK" 
-                showCancelButton={false} 
+            <Notification
+                message={notificationMessage}
+                isVisible={notificationVisible}
+                onClose={handleCloseNotification}
+                buttonText="OK"
+                showCancelButton={false}
             />
             <div className="messages-container">
                 <div className="conversations-sidebar">
                     <h3 className="conversations-title">Conversations</h3>
-                    
+
                     {conversations.map((conv, index) => {
                         return (
                             <div
@@ -169,32 +171,32 @@ const Messages = () => {
                     {activeChat ? (
                         <>
                             <div className="messages-list">
-                            {messages.map((msg, index) => {
-                                const isLastFromSender =
-                                index === messages.length - 1 || messages[index + 1].senderId !== msg.senderId;
+                                {messages.map((msg, index) => {
+                                    const isLastFromSender =
+                                        index === messages.length - 1 || messages[index + 1].senderId !== msg.senderId;
 
-                                return (
-                                <div
-                                    key={msg.id || msg.timestamp}
-                                    className={`message-container ${msg.senderId === user.uid ? 'message-container-self' : ''}`}
-                                >
-                                    {msg.senderId !== user.uid && (
-                                    <div className='circle-icon'>
-                                        {msg.senderEmail.charAt(0).toUpperCase()}
-                                    </div>
-                                    )}
-                                    <div className={`message-text ${msg.senderId === user.uid ? 'message-text-self' : ''}`}>
-                                    <p className='message-content'>{msg.text}</p>
-                                    {isLastFromSender && (
-                                        <span className='message-time'>
-                                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </span>
-                                    )}
-                                    </div>
-                                </div>
-                                );
-                            })}
-                            <div ref={messagesEndRef} />
+                                    return (
+                                        <div
+                                            key={msg.id || msg.timestamp}
+                                            className={`message-container ${msg.senderId === user.uid ? 'message-container-self' : ''}`}
+                                        >
+                                            {msg.senderId !== user.uid && (
+                                                <div className='circle-icon'>
+                                                    {msg.senderEmail.charAt(0).toUpperCase()}
+                                                </div>
+                                            )}
+                                            <div className={`message-text ${msg.senderId === user.uid ? 'message-text-self' : ''}`}>
+                                                <p className='message-content'>{msg.text}</p>
+                                                {isLastFromSender && (
+                                                    <span className='message-time'>
+                                                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                                <div ref={messagesEndRef} />
                             </div>
                             <MessageInput onSend={sendMessage} />
                         </>
@@ -205,14 +207,15 @@ const Messages = () => {
                     )}
                     <MessageInput onSend={sendMessage} />
                 </div>
+                {selectedSellerId && <MyProductList
+                    data={data}
+                    currentPage={currentPage}
+                    sellerEmail={selectedSellerId}
+                    getMyProducts={getAllMyProducts}
+                />}
             </div>
 
-            <MyProductList 
-                data={data} 
-                currentPage={currentPage} 
-                sellerEmail={selectedSellerId} 
-                getMyProducts={getAllMyProducts} 
-            />
+         
         </>
     );
 };
