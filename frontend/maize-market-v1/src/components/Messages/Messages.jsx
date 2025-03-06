@@ -208,6 +208,7 @@ const Messages = () => {
                     <MessageInput onSend={sendMessage} />
                 </div>
                 {selectedSellerId && <MyProductList
+                    className='seller-products'
                     data={data}
                     currentPage={currentPage}
                     sellerEmail={selectedSellerId}

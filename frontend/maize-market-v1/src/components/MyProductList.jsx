@@ -2,7 +2,7 @@ import React from 'react';
 import Product from "./Product";
 import './ProductList.css';
 
-const MyProductList = ({ data, currentPage, sellerEmail, getAllMyProducts }) => {
+const MyProductList = ({ data, currentPage, sellerEmail, getAllMyProducts, className }) => {
   const handlePagination = (newPage) => {
     getAllMyProducts(newPage, 10, sellerEmail);
   };
@@ -11,7 +11,7 @@ const MyProductList = ({ data, currentPage, sellerEmail, getAllMyProducts }) => 
     <main className='my-products-main'>
       {data?.content?.length === 0 && <div>You Have No Products</div>}
 
-      <ul className='product_list'>
+      <ul className= {className ? className : 'product_list'}>
         {data?.content?.length > 0 && data.content.map(product => 
           <Product product={product} key={product.id} />
         )}
