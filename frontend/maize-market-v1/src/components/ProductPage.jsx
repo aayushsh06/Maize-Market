@@ -114,10 +114,11 @@ const ProductPage = () => {
                     }
                 }
             }
-
+            console.log('HERE');
             if (sellerId) { 
+                console.log('SUP')
                 localStorage.setItem('selectedSellerEmail', product.sellerEmail);
-
+                //console.log(localStorage.getItem('selectedSellerEmail'));
                 const chatRef = ref(db, `conversations/${user.uid}`);
                 const chatSnapshot = await get(chatRef);
                 let chatExists = false;

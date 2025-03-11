@@ -22,6 +22,12 @@ const Messages = () => {
 
     const messagesEndRef = useRef(null);
 
+    /*useEffect(() =>{
+        if(localStorage.getItem('selectedSellerEmail')){
+            console.log(conversations)
+            
+        }
+    }) */
 
 
     const scrollToBottom = () => {
