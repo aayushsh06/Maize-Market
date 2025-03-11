@@ -2,7 +2,7 @@
 
 **Maize Market** is a university marketplace platform designed for the University of Michigan community, allowing students and faculty to buy and sell items seamlessly. In development using Java, SpringBoot, Javascript, and React.
 
-![Maize Market Preview](https://via.placeholder.com/1000x500?text=Project+Screenshot)  
+![Maize Market Preview](https://github.com/aayushsh06/Maize-Market/blob/master/project-images/landingPage.png)  
 
 ---
 
@@ -13,14 +13,14 @@ Secure sign-up and login system to ensure a trusted marketplace.
 
 ### 📦 Product Listings  
 Create, browse, and manage product listings with images, descriptions, and categories.  
-![Product Listings](https://via.placeholder.com/800x400?text=Product+Listings+Preview)  
+![Product Listings](https://github.com/aayushsh06/Maize-Market/blob/master/project-images/Products.png)  
 
 ### 🔍 Search Functionality  
 Find exactly what you're looking for with an intuitive search feature.  
 
 ### 💬 Messaging System  
 Built-in chat for buyers and sellers to negotiate and finalize deals.  
-![Messaging Feature](https://via.placeholder.com/800x400?text=Messaging+Preview)  
+![Messaging Feature](https://github.com/aayushsh06/Maize-Market/blob/master/project-images/textConvo.png)  
 
 ---
 
