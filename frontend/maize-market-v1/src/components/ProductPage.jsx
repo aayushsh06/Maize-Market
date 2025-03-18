@@ -93,65 +93,77 @@ const ProductPage = () => {
     };
 
     const handleMessageClick = async () => {
-        if (!user) {
-            console.log("User not logged in");
-            return;
+        if (!isAuthenticated) {
+          setIsVerificationNotice(false);
+          setNotificationMessage("You need to be logged in to message sellers. Please sign in or create an account.");
+          setShowNotification(true);
+          return;
         }
-
+      
         try {
-            const sellerEmail = product.sellerEmail;
-
-            const sellerRef = ref(db, `users`);
-            const snapshot = await get(sellerRef);
-            let sellerId = null;
-
-            if (snapshot.exists()) {
-                const users = snapshot.val();
-                for (const id in users) {
-                    if (users[id].email === sellerEmail) {
-                        sellerId = id;
-                        break;
-                    }
-                }
+          const sellerEmail = product.sellerEmail;
+          const buyerId = user.uid;
+      
+          const usersRef = ref(db, 'users');
+          const usersSnapshot = await get(usersRef);
+          
+          let sellerId = null;
+          if (usersSnapshot.exists()) {
+            const users = usersSnapshot.val();
+            for (const id in users) {
+              if (users[id].email === sellerEmail) {
+                sellerId = id;
+                break;
+              }
             }
-            console.log('HERE');
-            if (sellerId) { 
-                console.log('SUP')
-                localStorage.setItem('selectedSellerEmail', product.sellerEmail);
-                //console.log(localStorage.getItem('selectedSellerEmail'));
-                const chatRef = ref(db, `conversations/${user.uid}`);
-                const chatSnapshot = await get(chatRef);
-                let chatExists = false;
-
-                if (chatSnapshot.exists()) {
-                    const conversations = chatSnapshot.val();
-                    chatExists = Object.values(conversations).some(conv => conv.otherUserEmail === sellerEmail);
-                }
-
-                if (!chatExists) {
-                    const newChatRef = ref(db, `conversations/${user.uid}/${sellerId}`);
-                    await set(newChatRef, {
-                        otherUserEmail: sellerEmail,
-                        lastMessage: '',
-                        createdAt: new Date().toISOString()
-                    });
-                }
-
-                navigate("/messages");
-            } else {
-                return (
-                    <Notification 
-                        message="Seller not found. Please try again later."
-                        type="error"
-                        onClose={() => setShowNotification(false)}
-                        isVisible={true}
-                    />
-                );
-            }
+          }
+      
+          if (!sellerId) {
+            setNotificationMessage("Seller not found. Please try again later.");
+            setShowNotification(true);
+            return;
+          }
+      
+          const conversationId = [buyerId, sellerId].sort().join('_');
+          
+          const conversationRef = ref(db, `conversations/${conversationId}`);
+          const conversationSnapshot = await get(conversationRef);
+          
+          if (!conversationSnapshot.exists()) {
+            await set(conversationRef, {
+              participants: {
+                [buyerId]: true,
+                [sellerId]: true
+              },
+              createdAt: new Date().toISOString(),
+              lastMessage: null,
+              productId: product.id
+            });
+            
+            await update(ref(db), {
+              [`userConversations/${buyerId}/${conversationId}`]: {
+                otherUserEmail: sellerEmail,
+                otherUserId: sellerId,
+                lastRead: new Date().toISOString()
+              },
+              [`userConversations/${sellerId}/${conversationId}`]: {
+                otherUserEmail: email,
+                otherUserId: buyerId,
+                lastRead: new Date().toISOString()
+              }
+            });
+          }
+          
+          localStorage.setItem('currentConversationId', conversationId);
+          localStorage.setItem('currentProductId', product.id);
+          
+          navigate("/messages");
         } catch (error) {
-            console.error("Error opening chat:", error);
+          console.error("Error opening chat:", error);
+          setNotificationMessage("An error occurred. Please try again later.");
+          setShowNotification(true);
         }
-    };
+      };
 
     if (loading) {
         return <Loader />;
