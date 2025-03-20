@@ -6,7 +6,7 @@ const ProductList = ({data, currentPage, getAllProducts}) => {
   return (
     <div className="products-container">
       <header className="products-header">
-        <h1>Available Products</h1>
+        <h1>For Sale</h1>
       </header>
       
       <main className='main'>
