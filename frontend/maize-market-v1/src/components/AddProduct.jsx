@@ -105,8 +105,12 @@ const AddProduct = ({ getAllProducts }) => {
                                     required 
                                     placeholder="Enter product name" 
                                     value={values.name} 
-                                    onChange={handleInputChange} 
+                                    onChange={handleInputChange}
+                                    maxLength={60} 
                                 />
+                                <small className="char-count">
+                                    {values.name.length}/60 characters
+                                </small>
                             </div>
                             
                             <div className="input-box">
@@ -136,8 +140,12 @@ const AddProduct = ({ getAllProducts }) => {
                                     required 
                                     placeholder="Describe your product..." 
                                     value={values.description} 
-                                    onChange={handleInputChange} 
+                                    onChange={handleInputChange}
+                                    maxLength={250} 
                                 />
+                                <small className="char-count">
+                                    {values.description.length}/250 characters
+                                </small>
                             </div>
 
                             <div className="input-box">
@@ -239,4 +247,4 @@ const StyledWrapperCondition = styled.div`
     // Same styled components from AddProductModal
 `;
 
-export default AddProduct; 
+export default AddProduct;

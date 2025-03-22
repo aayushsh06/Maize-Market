@@ -499,3 +499,11 @@ input:focus, textarea:focus {
         box-shadow: 0 0 0 2px rgba(0, 183, 255, 0.2);
     }
 }
+
+.char-count {
+    display: block;
+    text-align: right;
+    color: #666;
+    font-size: 0.8em;
+    margin-top: 4px;
+}

@@ -89,7 +89,7 @@ const ProductEdit = ({ getAllMyProducts }) => {
                 }));
 
                 await updateProduct(values);
-                
+
                 if (file) {
                     const formData = new FormData();
                     formData.append('file', file, file.name);
@@ -124,28 +124,32 @@ const ProductEdit = ({ getAllMyProducts }) => {
                                         <i className="bi bi-tag"></i>
                                         Product Name
                                     </div>
-                                    <input 
-                                        type="text" 
-                                        name="name" 
-                                        required 
-                                        value={values.name} 
-                                        onChange={handleInputChange} 
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        required
+                                        value={values.name}
+                                        onChange={handleInputChange}
+                                        maxLength={60}
                                     />
+                                    <small className="char-count">
+                                        {values.name.length}/60 characters
+                                    </small>
                                 </div>
-                                
+
                                 <div className="input-box">
                                     <div className="details">
                                         <i className="bi bi-currency-dollar"></i>
                                         Price
                                     </div>
-                                    <input 
-                                        type="number" 
-                                        name="price" 
-                                        required 
-                                        step="0.50"
+                                    <input
+                                        type="number"
+                                        name="price"
+                                        required
+                                        step="1.00"
                                         min="0"
-                                        value={values.price} 
-                                        onChange={handleInputChange} 
+                                        value={values.price}
+                                        onChange={handleInputChange}
                                     />
                                 </div>
 
@@ -154,12 +158,16 @@ const ProductEdit = ({ getAllMyProducts }) => {
                                         <i className="bi bi-card-text"></i>
                                         Description
                                     </div>
-                                    <textarea 
-                                        name="description" 
-                                        required 
-                                        value={values.description} 
-                                        onChange={handleInputChange} 
+                                    <textarea
+                                        name="description"
+                                        required
+                                        value={values.description}
+                                        onChange={handleInputChange}
+                                        maxLength={250}
                                     />
+                                    <small className="char-count">
+                                        {values.name.length}/250 characters
+                                    </small>
                                 </div>
 
                                 <div className="input-box">
@@ -252,7 +260,7 @@ const ProductEdit = ({ getAllMyProducts }) => {
                     </div>
                 </div>
             </div>
-            <Notification 
+            <Notification
                 isVisible={showDeleteNotification}
                 message="Are you sure you want to delete this product?"
                 buttonText="Delete"
