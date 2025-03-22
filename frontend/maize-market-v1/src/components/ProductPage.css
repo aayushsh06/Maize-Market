@@ -67,7 +67,7 @@
     color: #00274C;
 }
 
-.product-price {
+.product-details .product-price {
     font-size: 1.5rem;
     font-weight: 600;
     color: #00274C;
@@ -134,7 +134,6 @@
     border-color: #bd2130;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     .productPage-container {
         grid-template-columns: 1fr;
@@ -404,4 +403,3 @@
     color: #00274C;
     border-color: #FFCB05;
 }
-  

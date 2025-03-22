@@ -5,7 +5,7 @@ import { UserContext } from "./UserContext";
 
 import Header from "./Header.jsx";
 import ProductList from "./ProductList.jsx";
-import Navbar from './NavBar.jsx';
+import Navbar from './Navbar.jsx';
 import Home from './Home.jsx';
 import SignIn from './Login.jsx';
 import UserInfo from './UserInfo.jsx';

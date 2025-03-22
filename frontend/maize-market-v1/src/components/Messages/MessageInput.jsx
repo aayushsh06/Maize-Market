@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaArrowUp } from 'react-icons/fa'; 
 
 const MessageInput = ({ onSend }) => {
     const [message, setMessage] = useState('');
@@ -19,9 +20,11 @@ const MessageInput = ({ onSend }) => {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Type a message..."
             />
-            <button type="submit" className='send-button'>Send</button>
+            <button type="submit" className='send-button'>
+                <FaArrowUp />
+            </button>
         </form>
     );
 };
 
-export default MessageInput; 
+export default MessageInput;

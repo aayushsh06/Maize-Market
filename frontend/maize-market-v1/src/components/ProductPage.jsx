@@ -17,7 +17,7 @@ const ProductPage = () => {
     const [isVerificationNotice, setIsVerificationNotice] = useState(false);
     const [isInCart, setIsInCart] = useState(false);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -39,14 +39,14 @@ const ProductPage = () => {
 
     const handleAddToCart = async () => {
         const currentUser = auth.currentUser;
-        
+
         if (!isAuthenticated) {
             setIsVerificationNotice(false);
             setNotificationMessage("You need to be logged in to add items to cart. Please sign in or create an account.");
             setShowNotification(true);
             return;
-        } 
-        
+        }
+
         if (currentUser && !currentUser.emailVerified) {
             setIsVerificationNotice(true);
             setNotificationMessage("Please verify your email before adding items to cart. Check your inbox for the verification link.");
@@ -93,117 +93,127 @@ const ProductPage = () => {
     };
 
     const handleMessageClick = async () => {
+        const currentUser = auth.currentUser;
+
         if (!isAuthenticated) {
-          setIsVerificationNotice(false);
-          setNotificationMessage("You need to be logged in to message sellers. Please sign in or create an account.");
-          setShowNotification(true);
-          return;
-        }
-      
-        try {
-          const sellerEmail = product.sellerEmail;
-          const buyerId = user.uid;
-      
-          const usersRef = ref(db, 'users');
-          const usersSnapshot = await get(usersRef);
-          
-          let sellerId = null;
-          if (usersSnapshot.exists()) {
-            const users = usersSnapshot.val();
-            for (const id in users) {
-              if (users[id].email === sellerEmail) {
-                sellerId = id;
-                break;
-              }
-            }
-          }
-      
-          if (!sellerId) {
-            setNotificationMessage("Seller not found. Please try again later.");
+            setIsVerificationNotice(false);
+            setNotificationMessage("You need to be logged in to message sellers. Please sign in or create an account.");
             setShowNotification(true);
             return;
-          }
-      
-          const conversationId = [buyerId, sellerId].sort().join('_');
-          
-          const conversationRef = ref(db, `conversations/${conversationId}`);
-          const conversationSnapshot = await get(conversationRef);
-          
-          if (!conversationSnapshot.exists()) {
-            await set(conversationRef, {
-              participants: {
-                [buyerId]: true,
-                [sellerId]: true
-              },
-              createdAt: new Date().toISOString(),
-              lastMessage: null,
-              productId: product.id
-            });
-            
-            await update(ref(db), {
-              [`userConversations/${buyerId}/${conversationId}`]: {
-                otherUserEmail: sellerEmail,
-                otherUserId: sellerId,
-                lastRead: new Date().toISOString()
-              },
-              [`userConversations/${sellerId}/${conversationId}`]: {
-                otherUserEmail: email,
-                otherUserId: buyerId,
-                lastRead: new Date().toISOString()
-              }
-            });
-          }
-          
-          localStorage.setItem('currentConversationId', conversationId);
-          localStorage.setItem('currentProductId', product.id);
-          
-          navigate("/messages");
-        } catch (error) {
-          console.error("Error opening chat:", error);
-          setNotificationMessage("An error occurred. Please try again later.");
-          setShowNotification(true);
         }
-      };
+
+        if (currentUser && !currentUser.emailVerified) {
+            setIsVerificationNotice(true);
+            setNotificationMessage("Please verify your email before messaging sellers. Check your inbox for the verification link.");
+            setShowNotification(true);
+            return;
+        }
+
+        try {
+            const sellerEmail = product.sellerEmail;
+            const buyerId = user.uid;
+
+            const usersRef = ref(db, 'users');
+            const usersSnapshot = await get(usersRef);
+
+            let sellerId = null;
+            if (usersSnapshot.exists()) {
+                const users = usersSnapshot.val();
+                for (const id in users) {
+                    if (users[id].email === sellerEmail) {
+                        sellerId = id;
+                        break;
+                    }
+                }
+            }
+
+            if (!sellerId) {
+                setNotificationMessage("Seller not found. Please try again later.");
+                setShowNotification(true);
+                return;
+            }
+
+            const conversationId = [buyerId, sellerId].sort().join('_');
+
+            const conversationRef = ref(db, `conversations/${conversationId}`);
+            const conversationSnapshot = await get(conversationRef);
+
+            if (!conversationSnapshot.exists()) {
+                await set(conversationRef, {
+                    participants: {
+                        [buyerId]: true,
+                        [sellerId]: true
+                    },
+                    createdAt: new Date().toISOString(),
+                    lastMessage: null,
+                    productId: product.id
+                });
+
+                await update(ref(db), {
+                    [`userConversations/${buyerId}/${conversationId}`]: {
+                        otherUserEmail: sellerEmail,
+                        otherUserId: sellerId,
+                        lastRead: new Date().toISOString()
+                    },
+                    [`userConversations/${sellerId}/${conversationId}`]: {
+                        otherUserEmail: email,
+                        otherUserId: buyerId,
+                        lastRead: new Date().toISOString()
+                    }
+                });
+            }
+
+            localStorage.setItem('currentConversationId', conversationId);
+            localStorage.setItem('currentProductId', product.id);
+
+            navigate("/messages");
+        } catch (error) {
+            console.error("Error opening chat:", error);
+            setNotificationMessage("An error occurred. Please try again later.");
+            setShowNotification(true);
+        }
+    };
 
     if (loading) {
         return <Loader />;
     }
-    
+
     return (
+        <>
+        {showNotification && (
+            isVerificationNotice || !isAuthenticated ? (
+                <Notification
+                    message={notificationMessage}
+                    type="error"
+                    buttonText="Login"
+                    onButtonClick={handleNotificationAction}
+                    onClose={() => setShowNotification(false)}
+                    showCancelButton={true}
+                    isVisible={showNotification}
+                />
+            ) : (
+                <Notification
+                    message={notificationMessage}
+                    type="success"
+                    onClose={() => setShowNotification(false)}
+                    isVisible={showNotification}
+                />
+            )
+        )}
         <div className="page-container">
-            {showNotification && (
-                isVerificationNotice || !isAuthenticated ? (
-                    <Notification 
-                        message={notificationMessage}
-                        type="error"
-                        buttonText="Login"
-                        onButtonClick={handleNotificationAction}
-                        onClose={() => setShowNotification(false)}
-                        showCancelButton={true}
-                        isVisible={showNotification}
-                    />
-                ) : (
-                    <Notification 
-                        message={notificationMessage}
-                        type="success"
-                        onClose={() => setShowNotification(false)}
-                        isVisible={showNotification}
-                    />
-                )
-            )}
             <div className="productPage-container" data-available={true}>
                 <div className="product-image-section">
                     <div className="image-wrapper" data-available={true}>
-                        <img src={product.photoUrl} alt={product.name}/>
+                        <img src={product.photoUrl} alt={product.name} />
                     </div>
                 </div>
-                
+
                 <div className="product-details">
                     <div className="product-header">
                         <h1 className="product-name">{product.name}</h1>
                         <div className="product-price">${product.price}</div>
-                        <div 
-                            className="product-availability-badge" 
+                        <div
+                            className="product-availability-badge"
                             data-available={true}
                         >
                             In Stock
@@ -232,13 +242,16 @@ const ProductPage = () => {
                         </div>
                         {email !== product.sellerEmail && (
                             <>
-                                <button 
+                                <button
                                     className={`cart-button ${isInCart ? 'remove' : 'add'}`}
                                     onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
                                 >
                                     {isInCart ? 'Remove from Cart' : 'Add to Cart'}
                                 </button>
-                                <button className="message-button" onClick={() => { handleMessageClick(); navigate("/messages"); }}>
+                                <button 
+                                    className="message-button" 
+                                    onClick={handleMessageClick}
+                                >
                                     Message Seller
                                 </button>
                             </>
@@ -253,8 +266,8 @@ const ProductPage = () => {
                                 {product.sellerEmail}
                             </a>
                             {email === product.sellerEmail && (
-                                <Link 
-                                    to={`/products/edit/${product.id}`} 
+                                <Link
+                                    to={`/products/edit/${product.id}`}
                                     className="edit-product-button"
                                 >
                                     Edit Listing
@@ -267,6 +280,7 @@ const ProductPage = () => {
                 </div>
             </div>
         </div>
+        </>
     )
 }
 

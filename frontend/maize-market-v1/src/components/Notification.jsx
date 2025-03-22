@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Notification = ({ message, isVisible, onClose, buttonText, onButtonClick, showCancelButton }) => {
   if (!isVisible) return null;
-
+  
   return (
     <NotificationWrapper>
       <div className="notification-content">
@@ -37,9 +37,9 @@ const NotificationWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 2000;
   animation: fadeIn 0.3s ease;
-
+  
   .notification-content {
     background: white;
     padding: 2rem;
@@ -49,20 +49,21 @@ const NotificationWrapper = styled.div`
     width: 90%;
     text-align: center;
     animation: slideUp 0.3s ease;
+    margin: 0 auto;
   }
-
+  
   p {
     color: #00274C;
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
   }
-
+  
   .button-group {
     display: flex;
     gap: 1rem;
     justify-content: center;
   }
-
+  
   .action-button {
     padding: 0.8rem 1.5rem;
     border-radius: 8px;
@@ -72,19 +73,19 @@ const NotificationWrapper = styled.div`
     background: #00274C;
     color: #FFCB05;
     border: none;
-
+    
     &.single {
       min-width: 120px;
       margin: 0 auto;
     }
-
+    
     &:hover {
       background: #001f3d;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 39, 76, 0.2);
     }
   }
-
+  
   .cancel-button {
     padding: 0.8rem 1.5rem;
     border-radius: 8px;
@@ -94,22 +95,22 @@ const NotificationWrapper = styled.div`
     background: transparent;
     color: #00274C;
     border: 2px solid #00274C;
-
+    
     &:hover {
       background: #f5f5f5;
       transform: translateY(-2px);
     }
   }
-
+  
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
   }
-
+  
   @keyframes slideUp {
     from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
   }
 `;
 
-export default Notification; 
+export default Notification;
