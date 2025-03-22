@@ -1,6 +1,15 @@
 .products-container {
-    min-height: calc(100vh - 64px);
-    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    background: #111111;
+    background-image: 
+        radial-gradient(circle at 20% 35%, rgba(123, 0, 255, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 10%, rgba(0, 183, 255, 0.15) 0%, transparent 50%);
+    backdrop-filter: blur(5px);
+    padding-top: 64px;
+    min-height: 100vh;
+    color: #f8f8f8;
     padding: 2rem;
     padding-top: 80px;
     margin-top: 0;

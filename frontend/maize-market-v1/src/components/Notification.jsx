@@ -37,7 +37,7 @@ const NotificationWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  z-index: 1000;
   animation: fadeIn 0.3s ease;
   
   .notification-content {

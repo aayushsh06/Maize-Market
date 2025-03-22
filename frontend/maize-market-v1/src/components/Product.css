@@ -1,7 +1,7 @@
 .product_item {
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background: rgba(18, 18, 18, 0.7);
     border-radius: 12px;
     overflow: hidden;
     text-decoration: none;
@@ -10,12 +10,17 @@
     width: 320px; 
     max-width: 320px;
     margin: 0 auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .product_item:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 203, 5, 0.3);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.2),
+        0 0 40px rgba(255, 203, 5, 0.1);
 }
 
 .product_image {
@@ -23,7 +28,7 @@
     width: 100%;
     height: 0;
     padding-bottom: 75%; 
-    background-color: #f8f9fa;
+    background-color: #473b77;
     overflow: hidden;
 }
 
@@ -34,7 +39,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain; 
-    background-color: #f8f9fa;
+    background-color: rgba(18, 18, 18, 0.5);
     transition: transform 0.3s ease;
     transform: translate(-50%, -50%); 
 }
@@ -53,14 +58,14 @@
 .product_name {
     font-size: 1.2rem; 
     font-weight: 600;
-    color: #00274C;
+    color: #FFCB05;
     margin: 0 0 0.5rem 0;
     line-height: 1.4;
 }
 
 .product_description {
     font-size: 0.9rem;
-    color: #666;
+    color: rgba(255, 255, 255, 0.7);
     margin: 0 0 1rem 0;
     line-height: 1.5;
     flex-grow: 1;
@@ -72,18 +77,18 @@
     align-items: center;
     margin-top: auto;
     padding-top: 1rem;
-    border-top: 1px solid #eee;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .product_price {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #00274C;
+    color: #FFCB05;
 }
 
 .product_seller {
     font-size: 0.85rem;
-    color: #666;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 @media (max-width: 768px) {
@@ -106,5 +111,6 @@
     gap: 2rem;
     justify-content: center;
     padding: 2rem;
+    background: rgba(18, 18, 18, 0.5);
 }
 

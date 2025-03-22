@@ -1,9 +1,15 @@
 .page-container {
-    min-height: calc(100vh - 64px);
-    background: linear-gradient(135deg, #00274C 0%, #001324 100%);
-    padding: 1.5rem;
-    padding-top: 80px; 
-    margin-top: 0;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    background: #111111;
+    background-image: 
+        radial-gradient(circle at 20% 35%, rgba(123, 0, 255, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 10%, rgba(0, 183, 255, 0.15) 0%, transparent 50%);
+    backdrop-filter: blur(5px);
+    padding-top: 64px;
+    min-height: 100vh;
+    color: #f8f8f8;
 }
 
 .products-header > h1 {
@@ -12,15 +18,18 @@
 
 .productPage-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 20px auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    background: rgba(18, 18, 18, 0.7);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 80px rgba(123, 0, 255, 0.1);
     backdrop-filter: blur(10px);
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .product-image-section {
@@ -33,9 +42,9 @@
     position: relative;
     border-radius: 12px;
     overflow: hidden;
-    background: white;
+    background: rgba(18, 18, 18, 0.5);
     border: 2px solid #FFCB05;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .image-wrapper img {
@@ -49,11 +58,14 @@
 }
 
 .product-details {
-    color: #00274C;
+    color: rgba(255, 255, 255, 0.9);
     padding: 1rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: rgba(18, 18, 18, 0.7);
+    border-radius: 16px;
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.2),
+        0 0 40px rgba(123, 0, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .product-header {
@@ -64,27 +76,31 @@
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: #00274C;
+    background: linear-gradient(to right, #7b00ff, #00b7ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 8px rgba(123, 0, 255, 0.3));
 }
 
 .product-details .product-price {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #00274C;
+    color: #FFCB05;
 }
 
 .product-description {
     font-size: 1.1rem;
     line-height: 1.6;
     margin-bottom: 2rem;
-    color: #333;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .product-meta {
     display: grid;
     gap: 1rem;
     margin-bottom: 2rem;
-    color: #666;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .meta-item {
@@ -214,15 +230,15 @@
 .info-group h2 {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #00274C;
+    color: #FFCB05;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid #FFCB05;
+    border-bottom: 2px solid rgba(255, 203, 5, 0.3);
 }
 
 .info-group p {
     line-height: 1.6;
-    color: #444;
+    color: rgba(255, 255, 255, 0.8);
     padding: 0.5rem;
 }
 
@@ -257,17 +273,17 @@
 }
 
 .seller-section {
-    background: #f8f9fa;
+    background: rgba(18, 18, 18, 0.5);
     padding: 1.5rem;
     border-radius: 12px;
-    border: 2px solid #FFCB05;
+    border: 1px solid rgba(255, 203, 5, 0.3);
     margin-top: 1.5rem;
 }
 
 .seller-section h2 {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #00274C;
+    color: #FFCB05;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid #FFCB05;
@@ -282,7 +298,7 @@
 
 .seller-name {
     font-weight: 600;
-    color: #00274C;
+    color: rgba(255, 255, 255, 0.9);
     font-size: 1.1rem;
     display: flex;
     align-items: center;
@@ -295,7 +311,7 @@
 }
 
 .seller-email {
-    color: #00274C;
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
     transition: color 0.2s ease;
     display: flex;
@@ -315,11 +331,11 @@
 
 .product-id {
     font-size: 0.85rem;
-    color: #666;
+    color: rgba(255, 255, 255, 0.5);
     text-align: right;
     margin-top: 1.5rem;
     padding-top: 1rem;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .product-details::-webkit-scrollbar {
@@ -327,35 +343,38 @@
 }
 
 .product-details::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
 }
 
 .product-details::-webkit-scrollbar-thumb {
-    background: #00274C;
+    background: #FFCB05;
     border-radius: 4px;
 }
 
 .product-details::-webkit-scrollbar-thumb:hover {
-    background: #001f3f;
+    background: #ffd738;
 }
 
 .edit-product-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #00274C;
-    color: #FFCB05;
+    background: linear-gradient(90deg, #7b00ff, #00b7ff);
+    color: #ffffff;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
     margin-top: 0.5rem;
     transition: all 0.2s ease;
-    border: 2px solid #00274C;
+    border: none;
     text-align: center;
     width: fit-content;
     gap: 0.5rem;
+    box-shadow: 
+        0 4px 15px rgba(123, 0, 255, 0.3),
+        0 0 30px rgba(123, 0, 255, 0.2);
 }
 
 .edit-product-button::before {
@@ -364,11 +383,12 @@
 }
 
 .edit-product-button:hover {
-    background-color: #FFCB05;
-    color: #00274C;
-    border-color: #FFCB05;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(90deg, #8e24ff, #10c0ff);
+    transform: translateY(-3px);
+    box-shadow: 
+        0 10px 25px rgba(123, 0, 255, 0.4),
+        0 0 40px rgba(123, 0, 255, 0.3);
+    color: #ffffff;
 }
 
 .edit-product-button:active {
@@ -379,18 +399,21 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #00274C;
-    color: #FFCB05;
+    background: linear-gradient(90deg, #7b00ff, #00b7ff);
+    color: #ffffff;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
     margin-top: 0.5rem;
     transition: all 0.2s ease;
-    border: 2px solid #00274C;
+    border: none;
     text-align: center;
     width: fit-content;
     gap: 0.5rem;
+    box-shadow: 
+        0 4px 15px rgba(123, 0, 255, 0.3),
+        0 0 30px rgba(123, 0, 255, 0.2);
 }
 
 .message-button::before {
@@ -399,7 +422,10 @@
 }
 
 .message-button:hover {
-    background-color: #FFCB05;
-    color: #00274C;
-    border-color: #FFCB05;
+    background: linear-gradient(90deg, #8e24ff, #10c0ff);
+    transform: translateY(-3px);
+    box-shadow: 
+        0 10px 25px rgba(123, 0, 255, 0.4),
+        0 0 40px rgba(123, 0, 255, 0.3);
+    color: #ffffff;
 }
