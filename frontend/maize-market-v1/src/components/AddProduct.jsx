@@ -119,7 +119,7 @@ const AddProduct = ({ getAllProducts }) => {
                                     name="price" 
                                     required 
                                     placeholder="Enter price" 
-                                    step="0.01"
+                                    step="1.00"
                                     min="0"
                                     value={values.price} 
                                     onChange={handleInputChange} 

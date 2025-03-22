@@ -22,7 +22,11 @@ const Messages = () => {
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        if(messagesEndRef.current){
+            const messagesContainer = document.querySelector('.messages-list');
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
     };
 
     useEffect(() => {
@@ -33,18 +37,18 @@ const Messages = () => {
         if (!user) return;
 
         const userConversationsRef = ref(db, `userConversations/${user.uid}`);
-        
+
         onValue(userConversationsRef, async (snapshot) => {
             try {
                 if (snapshot.exists()) {
                     const conversationsData = snapshot.val();
-                    
+
                     const formattedConversations = await Promise.all(
                         Object.entries(conversationsData).map(async ([conversationId, convData]) => {
                             const messagesRef = ref(db, `messages/${conversationId}`);
                             const messagesSnapshot = await get(messagesRef);
                             let lastMessageText = '';
-                            
+
                             if (messagesSnapshot.exists()) {
                                 const messagesData = messagesSnapshot.val();
                                 const messagesList = Object.values(messagesData);
@@ -53,26 +57,26 @@ const Messages = () => {
                                     lastMessageText = messagesList[messagesList.length - 1].text;
                                 }
                             }
-                            
+
                             return {
                                 id: conversationId,
                                 otherUserEmail: convData.otherUserEmail,
                                 otherUserId: convData.otherUserId,
-                                lastMessage: lastMessageText ? 
-                                    (lastMessageText.length > 20 ? lastMessageText.substring(0, 20) + '...' : lastMessageText) : 
+                                lastMessage: lastMessageText ?
+                                    (lastMessageText.length > 20 ? lastMessageText.substring(0, 20) + '...' : lastMessageText) :
                                     'No messages yet'
                             };
                         })
                     );
-                    
+
                     setConversations(formattedConversations);
-                    
+
                     const storedConversationId = localStorage.getItem('currentConversationId');
                     if (storedConversationId) {
                         const conversationToActivate = formattedConversations.find(
                             conv => conv.id === storedConversationId
                         );
-                        
+
                         if (conversationToActivate) {
                             setActiveConversationId(storedConversationId);
                             setActiveChat(conversationToActivate);
@@ -94,7 +98,7 @@ const Messages = () => {
         if (!activeConversationId) return;
 
         const messagesRef = ref(db, `messages/${activeConversationId}`);
-        
+
         onValue(messagesRef, (snapshot) => {
             try {
                 if (snapshot.exists()) {
@@ -103,11 +107,11 @@ const Messages = () => {
                         id,
                         ...msg,
                     }));
-                    
+
                     messagesList.sort((a, b) => {
                         return (a.timestamp || 0) - (b.timestamp || 0);
                     });
-                    
+
                     setMessages(messagesList);
                 } else {
                     setMessages([]);
@@ -123,7 +127,7 @@ const Messages = () => {
         if (activeChat && activeChat.otherUserEmail) {
             getAllMyProducts(currentPage);
         }
-    }, [activeChat]);
+    }, [activeChat, currentPage]);
 
     const getAllMyProducts = async (page = 0, size = 10) => {
         try {
@@ -155,17 +159,17 @@ const Messages = () => {
 
         const messagesRef = ref(db, `messages/${activeConversationId}`);
         const newMessageRef = push(messagesRef);
-        
+
         try {
             await set(newMessageRef, messageData);
-            
+
             const conversationRef = ref(db, `conversations/${activeConversationId}`);
             await set(conversationRef, {
                 lastMessage: text,
                 lastMessageTime: serverTimestamp(),
                 lastMessageSenderId: user.uid
             }, { merge: true });
-            
+
         } catch (error) {
             console.error("Error sending message:", error);
             showNotification("Failed to send message");
@@ -190,7 +194,7 @@ const Messages = () => {
                 buttonText="OK"
                 showCancelButton={false}
             />
-            
+
             <div className="messages-container">
                 <div className="conversations-sidebar">
                     <h3 className="conversations-title">Conversations</h3>
@@ -202,13 +206,13 @@ const Messages = () => {
                                 className={`user conversation-item ${activeConversationId === conv.id ? 'active' : ''}`}
                                 onClick={() => selectConversation(conv)}
                             >
+                                <div className="circle-icon">
+                                    {conv.otherUserEmail.charAt(0).toUpperCase()}
+                                </div>
                                 <div className="user-info">
-                                    <div className="circle-icon">
-                                        {conv.otherUserEmail.charAt(0).toUpperCase()}
-                                    </div>
                                     <h2 className="user-email">
-                                        {conv.otherUserEmail.split('@')[0].length > 20 
-                                            ? conv.otherUserEmail.split('@')[0].substring(0, 20) + '...' 
+                                        {conv.otherUserEmail.split('@')[0].length > 20
+                                            ? conv.otherUserEmail.split('@')[0].substring(0, 20) + '...'
                                             : conv.otherUserEmail.split('@')[0]}
                                     </h2>
                                     <p className="preview-message">{conv.lastMessage}</p>
@@ -244,11 +248,11 @@ const Messages = () => {
                                 {messages.length > 0 ? (
                                     messages.map((msg, index) => {
                                         const isLastFromSender =
-                                            index === messages.length - 1 || 
+                                            index === messages.length - 1 ||
                                             messages[index + 1].senderId !== msg.senderId;
-                                        
-                                        const timestamp = msg.timestamp 
-                                            ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+
+                                        const timestamp = msg.timestamp
+                                            ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                                             : '';
 
                                         return (
@@ -286,19 +290,32 @@ const Messages = () => {
                     )}
                 </div>
 
-
-                {activeChat && <div className='products-list'>
-                    <h1>{activeChat.otherUserEmail.split('@')[0].toUpperCase()}'s Products</h1>
-                    {selectedUserEmail && (
-                        <MyProductList
-                            className='seller-products'
-                            data={productData}
-                            currentPage={currentPage}
-                            sellerEmail={selectedUserEmail}
-                            getMyProducts={getAllMyProducts}
-                        />
+                <div className='products-list'>
+                    {activeChat ? (
+                        <>
+                            <h1 className="products-list-header">
+                                {activeChat.otherUserEmail.split('@')[0]}'s Products
+                            </h1>
+                            {productData.content && productData.content.length > 0 ? (
+                                <MyProductList
+                                    className='seller-products'
+                                    data={productData}
+                                    currentPage={currentPage}
+                                    sellerEmail={selectedUserEmail}
+                                    getMyProducts={getAllMyProducts}
+                                />
+                            ) : (
+                                <div className="no-products-message">
+                                    <p>This user is not selling any products yet.</p>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="no-products-message">
+                            <p>Select a conversation to see user's products</p>
+                        </div>
                     )}
-                </div>}
+                </div>
             </div>
         </>
     );

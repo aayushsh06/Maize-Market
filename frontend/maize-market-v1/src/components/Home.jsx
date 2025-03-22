@@ -25,11 +25,12 @@ const Home = () => {
                     <p>Connect directly with fellow University of Michigan students to buy and sell items.</p>
                 </div>
 
-                <div className="feature-card">
+                {/*}<div className="feature-card">
                     <FaShoppingCart className="feature-icon" />
                     <h2>Easy Shopping</h2>
                     <p>Browse, save, and purchase items with our intuitive cart system.</p>
                 </div>
+                {*/}
 
                 <div className="feature-card">
                     <FaLock className="feature-icon" />

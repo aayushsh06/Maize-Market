@@ -138,7 +138,7 @@ const Login = () => {
             </button>
           </div>
           <div className="login-footer">
-            <p>All email domains are accepted</p>
+            <p>All email domains are accepted until December 2025</p>
           </div>
         </div>
       </div>
