@@ -44,7 +44,10 @@
 
 .nav-text {
     display: inline;
-    color: rgb(67, 28, 165);
+    background:#7b00ff;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .nav-link {

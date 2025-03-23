@@ -41,7 +41,7 @@ const NotificationWrapper = styled.div`
   animation: fadeIn 0.3s ease;
   
   .notification-content {
-    background: white;
+    background: #00274C;
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 39, 76, 0.2);
@@ -58,9 +58,10 @@ const NotificationWrapper = styled.div`
   }
   
   p {
-    color: #00274C;
+    color: #FFCB05;
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
+    line-height: 1.5;
   }
   
   .button-group {
@@ -75,8 +76,8 @@ const NotificationWrapper = styled.div`
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: #00274C;
-    color: #FFCB05;
+    background: #FFCB05;
+    color: #00274C;
     border: none;
     text-align: center;
     
@@ -86,9 +87,9 @@ const NotificationWrapper = styled.div`
     }
     
     &:hover {
-      background: #001f3d;
+      background: #FFCB05;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 39, 76, 0.2);
+      box-shadow: 0 4px 12px rgba(255, 203, 5, 0.3);
     }
   }
   
@@ -99,12 +100,13 @@ const NotificationWrapper = styled.div`
     cursor: pointer;
     transition: all 0.3s ease;
     background: transparent;
-    color: #00274C;
-    border: 2px solid #00274C;
+    color: #FFCB05;
+    border: 2px solid #FFCB05;
     
     &:hover {
-      background: #f5f5f5;
-      transform: translateY(-2px);
+      background: rgba(255, 203, 5, 0.1);
+      color: #FFCB05;
+      border-color: #FFCB05;
     }
   }
   
