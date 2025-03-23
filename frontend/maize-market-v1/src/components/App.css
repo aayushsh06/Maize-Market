@@ -10,6 +10,7 @@
     font-size: 10px;
     margin-left: 4px;
     position: relative;
+    vertical-align: middle; 
 }
 
 .verified-icon:hover::after {

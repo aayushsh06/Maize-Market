@@ -234,7 +234,7 @@ const Messages = () => {
                                     {activeChat.otherUserEmail.charAt(0).toUpperCase()}
                                 </div>
                                 <span className='recipient-name'>
-                                    {activeChat.otherUserEmail}
+                                    {activeChat.otherUserEmail}{activeChat.otherUserEmail.split('@')[1] == 'umich.edu' ? <span className='verified-icon'>✓</span> : ''}
                                 </span>
                             </>
                         ) : (
