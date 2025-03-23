@@ -87,12 +87,12 @@ const Navbar = ({toggleModal}) => {
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" strokeWidth={0} fill="currentColor" stroke="currentColor" className="icon">
               <path d="M3 1.5A1.5 1.5 0 0 1 4.5 0h15A1.5 1.5 0 0 1 21 1.5v21A1.5 1.5 0 0 1 19.5 24h-15A1.5 1.5 0 0 1 3 22.5v-21zM4.5 1.5v21h15v-21h-15zm3 4.5h9v1.5h-9V6zm0 3h9v1.5h-9V9zm0 3h9v1.5h-9V12zm0 3h9v1.5h-9V15z"/>
             </svg>
-            Products
+            <span className="nav-text">Products</span>
           </button>
           
           <button className="nav-link" onClick={handleAddClick}>
-            <i className='bi bi-plus-square'></i>
-            Add Product
+            <i className="bi bi-plus-square icon"></i>
+            <span className="nav-text">Add Product</span>
           </button>
           
           <button className="nav-link" onClick={handleCartClick}>
@@ -101,19 +101,19 @@ const Navbar = ({toggleModal}) => {
               <circle r={1} cy={21} cx={20} />
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
             </svg>
-            Cart
+            <span className="nav-text">Cart</span>
           </button>
 
           <button className="nav-link" onClick={handleMessagesClick}>
-            <i className='bi bi-chat-dots'></i>
-            Messages
+            <i className="bi bi-chat-dots icon"></i>
+            <span className="nav-text">Messages</span>
           </button>
           
           <button className="nav-link" onClick={handleUserClick}>
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" strokeWidth={0} fill="currentColor" stroke="currentColor" className="icon">
               <path d="M12 2.5a5.5 5.5 0 0 1 3.096 10.047 9.005 9.005 0 0 1 5.9 8.181.75.75 0 1 1-1.499.044 7.5 7.5 0 0 0-14.993 0 .75.75 0 0 1-1.5-.045 9.005 9.005 0 0 1 5.9-8.18A5.5 5.5 0 0 1 12 2.5ZM8 8a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z" />
             </svg>
-            {isAuthenticated ? 'Profile' : 'Login'}
+            <span className="nav-text">{isAuthenticated ? 'Profile' : 'Login'}</span>
           </button>
         </div>
       </nav>

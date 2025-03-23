@@ -116,6 +116,10 @@ body {
 .user-detail-value {
     color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .logout-button {
