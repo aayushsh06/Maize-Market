@@ -15,6 +15,7 @@ import ProductEdit from './ProductEdit.jsx';
 import Cart from './Cart.jsx';
 import Messages from './Messages/Messages.jsx';
 import CustomLoader from './Loader';
+import './App.css'
 
 function App() {
   const { isAuthenticated } = useContext(UserContext);

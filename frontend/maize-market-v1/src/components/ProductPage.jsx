@@ -261,7 +261,7 @@ const ProductPage = () => {
                     <div className="seller-section">
                         <h2>Seller Information</h2>
                         <div className="seller-info">
-                            <p className="seller-name">{product.seller}</p>
+                            <p className="seller-name">{product.seller}<span className="product_seller">{product.sellerEmail.split('@')[1] == 'umich.edu' ?<span className='verified-icon'>✓</span> : ''}</span></p>
                             <a href={`mailto:${product.sellerEmail}`} className="seller-email">
                                 {product.sellerEmail}
                             </a>

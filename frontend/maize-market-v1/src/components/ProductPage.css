@@ -429,3 +429,7 @@
         0 0 40px rgba(123, 0, 255, 0.3);
     color: #ffffff;
 }
+
+.seller-section .verified-icon{
+    margin: 0px;
+}

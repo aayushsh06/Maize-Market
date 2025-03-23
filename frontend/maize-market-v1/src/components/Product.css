@@ -3,7 +3,6 @@
     flex-direction: column;
     background: rgba(18, 18, 18, 0.7);
     border-radius: 12px;
-    overflow: hidden;
     text-decoration: none;
     transition: all 0.3s ease;
     height: 100%;
@@ -113,4 +112,6 @@
     padding: 2rem;
     background: rgba(18, 18, 18, 0.5);
 }
+
+
 

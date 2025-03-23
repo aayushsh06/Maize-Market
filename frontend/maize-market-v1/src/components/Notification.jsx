@@ -18,7 +18,7 @@ const Notification = ({ message, isVisible, onClose, buttonText, onButtonClick, 
             </button>
           </div>
         ) : (
-          <button className="action-button single" onClick={onClose}>
+          <button className="action-button" onClick={onClose}>
             OK
           </button>
         )}
@@ -37,7 +37,7 @@ const NotificationWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 2000;
   animation: fadeIn 0.3s ease;
   
   .notification-content {
@@ -50,6 +50,11 @@ const NotificationWrapper = styled.div`
     text-align: center;
     animation: slideUp 0.3s ease;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
   }
   
   p {
@@ -73,6 +78,7 @@ const NotificationWrapper = styled.div`
     background: #00274C;
     color: #FFCB05;
     border: none;
+    text-align: center;
     
     &.single {
       min-width: 120px;

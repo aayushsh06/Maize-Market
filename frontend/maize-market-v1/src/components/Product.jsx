@@ -13,7 +13,7 @@ const Product = ({product}) => {
         <p className="product_description">{product.description.substring(0,72)}{product.description.length > 72 ? '...' : ''}</p>
         <div className="product_footer">
           <span className="product_price">${product.price}</span>
-          <span className="product_seller">By {product.seller.substring(0, 25)}</span>
+          <span className="product_seller">By {product.seller.substring(0, 25)}{product.sellerEmail.split('@')[1] == 'umich.edu' ?<span className='verified-icon'>✓</span> : ''}</span>
         </div>
       </div>
     </Link>

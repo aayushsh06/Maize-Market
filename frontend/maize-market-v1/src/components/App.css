@@ -1,0 +1,29 @@
+.verified-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #0074D9;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    margin-left: 4px;
+    position: relative;
+}
+
+.verified-icon:hover::after {
+    content: "Verified Student";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -25px;
+    background-color: #333;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000000;
+    pointer-events: none;
+}
