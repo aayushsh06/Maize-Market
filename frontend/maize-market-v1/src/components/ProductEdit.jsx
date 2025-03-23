@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getProduct, updateProduct, updatePhoto, deleteProduct } from '../api/ProductService';
 import { auth } from '../api/Firebase-config.js';
 import Notification from './Notification';
-import './AddProduct.css';
 
 const ProductEdit = ({ getAllMyProducts }) => {
     const navigate = useNavigate();

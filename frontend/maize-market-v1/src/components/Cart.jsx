@@ -5,7 +5,6 @@ import { useNavigate, Link } from 'react-router-dom'
 import { getProduct } from '../api/ProductService'
 import Notification from './Notification'
 import Product from './Product'
-import './ProductList.css'
 import { FaShoppingCart } from 'react-icons/fa'
 import CustomLoader from './Loader'
 

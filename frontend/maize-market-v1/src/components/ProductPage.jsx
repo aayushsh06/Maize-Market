@@ -5,7 +5,7 @@ import { db, ref, update, get, auth, set } from '../api/Firebase-config';
 import Loader from './Loader.jsx';
 import { UserContext } from './UserContext';
 import Notification from './Notification';
-import './ProductPage.css'
+import '../styles/ProductPage.css'
 
 const ProductPage = () => {
     const { productId } = useParams();

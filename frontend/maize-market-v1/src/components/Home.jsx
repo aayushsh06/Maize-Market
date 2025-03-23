@@ -1,5 +1,5 @@
 import React from 'react';
-import "./Home.css";
+import "../styles/Home.css";
 import { useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUserFriends, FaLock, FaHandshake } from 'react-icons/fa';
 

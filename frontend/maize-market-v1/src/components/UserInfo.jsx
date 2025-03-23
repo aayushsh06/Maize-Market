@@ -4,7 +4,7 @@ import { auth, signOut } from '../api/Firebase-config.js';
 import { UserContext } from './UserContext.jsx';
 import { getMyProducts } from '../api/ProductService.js';
 import MyProductList from './MyProductList.jsx';
-import './UserInfo.css';
+import '../styles/UserInfo.css';
 import { FaUser, FaEnvelope, FaSignOutAlt, FaBox } from 'react-icons/fa';
 
 const UserInfo = () => {

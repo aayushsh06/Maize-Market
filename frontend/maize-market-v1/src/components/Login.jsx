@@ -4,7 +4,7 @@ import { auth, signInWithPopup, onAuthStateChanged, setPersistence, browserLocal
 import Loader from "./Loader.jsx";
 import { useNavigate } from 'react-router-dom';
 import Notification from './Notification';
-import './Login.css';
+import '../styles/Login.css';
 
 const Login = () => {
   const { username, setUsername, setAuthentication, isAuthenticated, email, setEmail } = useContext(UserContext);

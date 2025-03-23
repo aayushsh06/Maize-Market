@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext.jsx';
 import { auth } from '../api/Firebase-config.js';
 import Notification from './Notification.jsx';
-import './Navbar.css';
+import '../styles/Navbar.css';
 
 const Navbar = ({toggleModal}) => {
   const navigate = useNavigate();

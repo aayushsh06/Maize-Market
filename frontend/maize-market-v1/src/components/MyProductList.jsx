@@ -1,6 +1,5 @@
 import React from 'react';
 import Product from "./Product";
-import './ProductList.css';
 
 const MyProductList = ({ data, currentPage, sellerEmail, getAllMyProducts, className }) => {
   const handlePagination = (newPage) => {

@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addProduct, updatePhoto } from '../api/ProductService';
 import { auth } from '../api/Firebase-config.js';
-import './AddProduct.css';
+import '../styles/AddProduct.css';
 import styled from 'styled-components';
 
 const AddProduct = ({ getAllProducts }) => {
