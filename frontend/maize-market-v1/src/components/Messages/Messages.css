@@ -99,6 +99,7 @@
     gap: 0.5rem;
     max-width: 70%;
     position: relative;
+    align-items: center;
 }
 
 .message-container-self {
@@ -266,7 +267,6 @@
     box-shadow: none;
     box-shadow: none;
     transition: all 0.3s ease;
-
 }
 
 .recipient-container > button:hover {
@@ -392,6 +392,65 @@
 .products-list-header {
     color: #FFCB05;
 }
+
+.confirm {
+    width: 400px;
+    z-index: 1000;
+    background-color: #00274C;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 39, 76, 0.2);
+    padding: 20px;
+}
+
+.confirm > p {
+    padding: 30px;
+    font-size: 1.5rem;
+    color: #FFCB05;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.confirm > .options {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0 20px 20px;
+}
+
+.confirm > .options > button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.confirm > .options > button:first-child {
+    background: transparent;
+    color: #FFCB05;
+    border: 2px solid #FFCB05;
+}
+
+.confirm > .options > button:first-child:hover {
+    background: rgba(255, 203, 5, 0.1);
+}
+
+.confirm > .options > button:last-child {
+    background: #FFCB05;
+    color: #00274C;
+    border: none;
+}
+
+.confirm > .options > button:last-child:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 203, 5, 0.3);
+}
+
 
 @media (max-width: 1200px) {
     .messages-container {

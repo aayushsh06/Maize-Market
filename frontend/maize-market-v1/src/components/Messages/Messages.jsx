@@ -20,6 +20,7 @@ const Messages = () => {
     const [currentPage] = useState(0);
     const [selectedUserEmail, setSelectedUserEmail] = useState(null);
     const messagesEndRef = useRef(null);
+    const [deleteModal, setDeleteModal] = useState(false)
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
@@ -230,6 +231,20 @@ const Messages = () => {
                 showCancelButton={false}
             />
 
+            {deleteModal ? 
+            <div className='confirm'>
+                <p>Deleting Will Permenantly Delete All Messages</p>
+                <div className='options'>
+                    <button onClick={() => setDeleteModal(false)}>Cancel</button>
+                    <button onClick={() => {
+                        handleDelete();
+                        setDeleteModal(false);
+                    }}>Confirm</button>
+                </div>
+            </div>
+            :<></>
+            }
+
             <div className="messages-container">
                 <div className="conversations-sidebar">
                     <h3 className="conversations-title">Conversations</h3>
@@ -273,7 +288,7 @@ const Messages = () => {
                                 <span className='recipient-name'>
                                     {activeChat.otherUserEmail}{activeChat.otherUserEmail.split('@')[1] == 'umich.edu' ? <span className='verified-icon'>✓</span> : ''}
                                 </span>
-                                <button onClick={() => handleDelete()}>Delete Conversation</button>
+                                <button onClick={() => setDeleteModal(true)}>Delete Conversation</button>
                             </>
                         ) : (
                             <span className='recipient-name'>Select a chat</span>
