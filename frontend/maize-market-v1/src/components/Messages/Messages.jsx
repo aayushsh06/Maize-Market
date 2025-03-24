@@ -200,7 +200,9 @@ const Messages = () => {
                     <h3 className="conversations-title">Conversations</h3>
 
                     {conversations.length > 0 ? (
-                        conversations.map((conv) => (
+                        conversations
+                        .filter(conv => conv.lastMessage !== "No messages yet")
+                        .map((conv) => ( 
                             <div
                                 key={conv.id}
                                 className={`user conversation-item ${activeConversationId === conv.id ? 'active' : ''}`}
