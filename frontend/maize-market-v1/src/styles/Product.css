@@ -28,6 +28,7 @@
     height: 0;
     padding-bottom: 75%; 
     overflow: hidden;
+    border-radius: 10px;
 }
 
 .product_image img {
