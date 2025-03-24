@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { UserContext } from '../UserContext';
-import { ref, onValue, set, push, serverTimestamp, get } from 'firebase/database';
+import { ref, onValue, set, push, serverTimestamp, get, remove } from 'firebase/database';
 import { db } from '../../api/Firebase-config.js';
 import MessageInput from './MessageInput';
 import './Messages.css';
@@ -22,7 +22,7 @@ const Messages = () => {
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
-        if(messagesEndRef.current){
+        if (messagesEndRef.current) {
             const messagesContainer = document.querySelector('.messages-list');
 
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -185,6 +185,41 @@ const Messages = () => {
         setNotificationVisible(false);
     };
 
+    const handleDelete = async () => {
+        if (!activeConversationId || !activeConversationId.includes('_')) {
+            setNotificationMessage('Error Deleting');
+            setNotificationVisible(true);
+        }
+
+        const [currentUserId, otherUserId] = activeConversationId.split('_');
+
+        try{
+            const conversationPath = `conversations/${activeConversationId}`;
+            const currentUserConversationPath = `userConversations/${currentUserId}/${activeConversationId}`;
+            const otherUserConversationPath = `userConversations/${otherUserId}/${activeConversationId}`;
+            const messagesPath = `messages/${activeConversationId}`;
+
+            const conversationRef = ref(db, conversationPath);
+            const currentUserConversationRef = ref(db, currentUserConversationPath);
+            const otherUserConversationRef = ref(db, otherUserConversationPath);
+            const messagesRef = ref(db, messagesPath);
+
+            await Promise.all([
+                remove(conversationRef),
+                remove(currentUserConversationRef),
+                remove(otherUserConversationRef),
+                remove(messagesRef)
+            ])
+        }
+        catch(error){
+            setNotificationMessage(error.message);
+            setNotificationVisible(true);
+        }
+        console.log('Conversation ID' + activeConversationId);
+        console.log('Current User ID' + currentUserId);
+        console.log('Other User ID' + otherUserId);
+    }
+
     return (
         <>
             <Notification
@@ -201,26 +236,26 @@ const Messages = () => {
 
                     {conversations.length > 0 ? (
                         conversations
-                        .filter(conv => conv.lastMessage !== "No messages yet")
-                        .map((conv) => ( 
-                            <div
-                                key={conv.id}
-                                className={`user conversation-item ${activeConversationId === conv.id ? 'active' : ''}`}
-                                onClick={() => selectConversation(conv)}
-                            >
-                                <div className="circle-icon">
-                                    {conv.otherUserEmail.charAt(0).toUpperCase()}
+                            .filter(conv => conv.lastMessage !== "No messages yet")
+                            .map((conv) => (
+                                <div
+                                    key={conv.id}
+                                    className={`user conversation-item ${activeConversationId === conv.id ? 'active' : ''}`}
+                                    onClick={() => selectConversation(conv)}
+                                >
+                                    <div className="circle-icon">
+                                        {conv.otherUserEmail.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div className="user-info">
+                                        <h2 className="user-email">
+                                            {conv.otherUserEmail.split('@')[0].length > 20
+                                                ? conv.otherUserEmail.split('@')[0].substring(0, 20) + '...'
+                                                : conv.otherUserEmail.split('@')[0]}
+                                        </h2>
+                                        <p className="preview-message">{conv.lastMessage}</p>
+                                    </div>
                                 </div>
-                                <div className="user-info">
-                                    <h2 className="user-email">
-                                        {conv.otherUserEmail.split('@')[0].length > 20
-                                            ? conv.otherUserEmail.split('@')[0].substring(0, 20) + '...'
-                                            : conv.otherUserEmail.split('@')[0]}
-                                    </h2>
-                                    <p className="preview-message">{conv.lastMessage}</p>
-                                </div>
-                            </div>
-                        ))
+                            ))
                     ) : (
                         <div className="no-conversations">
                             <p>No conversations yet</p>
@@ -238,6 +273,7 @@ const Messages = () => {
                                 <span className='recipient-name'>
                                     {activeChat.otherUserEmail}{activeChat.otherUserEmail.split('@')[1] == 'umich.edu' ? <span className='verified-icon'>✓</span> : ''}
                                 </span>
+                                <button onClick={() => handleDelete()}>Delete Conversation</button>
                             </>
                         ) : (
                             <span className='recipient-name'>Select a chat</span>

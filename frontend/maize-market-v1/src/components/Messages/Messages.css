@@ -178,7 +178,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 5px;
+    margin-left: 15px;
 }
 
 .send-button:hover {
@@ -256,6 +256,24 @@
     background: rgba(17, 24, 39, 0.98);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     height: 70px;
+}
+
+.recipient-container > button {
+    margin-left: auto;
+    background-color: #ec1e1e;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: none;
+    box-shadow: none;
+    transition: all 0.3s ease;
+
+}
+
+.recipient-container > button:hover {
+    background-color: #ff3333;
+    transform: scale(1.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .recipient-name {

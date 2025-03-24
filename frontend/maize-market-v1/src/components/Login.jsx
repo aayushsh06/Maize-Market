@@ -55,12 +55,6 @@ const Login = () => {
         email: user.email,
         createdAt: new Date().toISOString()
       });
-
-      const chatRef = ref(db, "chats/" + user.uid);
-      await update(chatRef, {
-        messages: [],
-        createdAt: new Date().toISOString()
-      });
       
       return extractedUsername;
     }

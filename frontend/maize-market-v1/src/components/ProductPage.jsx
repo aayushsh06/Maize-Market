@@ -140,13 +140,8 @@ const ProductPage = () => {
 
             if (!conversationSnapshot.exists()) {
                 await set(conversationRef, {
-                    participants: {
-                        [buyerId]: true,
-                        [sellerId]: true
-                    },
                     createdAt: new Date().toISOString(),
                     lastMessage: null,
-                    productId: product.id
                 });
 
                 await update(ref(db), {
