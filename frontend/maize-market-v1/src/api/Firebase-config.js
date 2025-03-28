@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, update, get, set} from "firebase/database"
+import { getDatabase, ref, update, get, set, query, orderByChild, equalTo, runTransaction} from "firebase/database"
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const firebaseConfig = {
@@ -21,4 +21,4 @@ const db = getDatabase(app);
 const provider = new GoogleAuthProvider();
 
 
-export { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut, db, ref, update, get, set, signInWithPopup, provider };
+export { auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserLocalPersistence, signOut, db, ref, update, get, set, signInWithPopup, provider, query, orderByChild, equalTo, runTransaction };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getProduct } from '../api/ProductService';
-import { db, ref, update, get, auth, set } from '../api/Firebase-config';
+import { db, ref, update, get, auth, query, orderByChild, equalTo, runTransaction } from '../api/Firebase-config';
 import Loader from './Loader.jsx';
 import { UserContext } from './UserContext';
 import Notification from './Notification';
@@ -94,57 +94,60 @@ const ProductPage = () => {
 
     const handleMessageClick = async () => {
         const currentUser = auth.currentUser;
-
+    
         if (!isAuthenticated) {
             setIsVerificationNotice(false);
             setNotificationMessage("You need to be logged in to message sellers. Please sign in or create an account.");
             setShowNotification(true);
             return;
         }
-
+    
         if (currentUser && !currentUser.emailVerified) {
             setIsVerificationNotice(true);
             setNotificationMessage("Please verify your email before messaging sellers. Check your inbox for the verification link.");
             setShowNotification(true);
             return;
         }
-
+    
         try {
             const sellerEmail = product.sellerEmail;
             const buyerId = user.uid;
-
-            const usersRef = ref(db, 'users');
-            const usersSnapshot = await get(usersRef);
-
+    
+            const usersQuery = query(ref(db, 'users'), orderByChild('email'), equalTo(sellerEmail));
+            const usersSnapshot = await get(usersQuery);
+    
             let sellerId = null;
             if (usersSnapshot.exists()) {
                 const users = usersSnapshot.val();
-                for (const id in users) {
-                    if (users[id].email === sellerEmail) {
-                        sellerId = id;
-                        break;
-                    }
-                }
+                sellerId = Object.keys(users)[0];
             }
-
+    
             if (!sellerId) {
                 setNotificationMessage("Seller not found. Please try again later.");
                 setShowNotification(true);
                 return;
             }
-
+    
             const conversationId = [buyerId, sellerId].sort().join('_');
-
-            const conversationRef = ref(db, `conversations/${conversationId}`);
-            const conversationSnapshot = await get(conversationRef);
-
-            if (!conversationSnapshot.exists()) {
-                await set(conversationRef, {
-                    createdAt: new Date().toISOString(),
-                    lastMessage: null,
+    
+            try {
+                const conversationRef = ref(db, `conversations/${conversationId}`);
+                
+                await runTransaction(conversationRef, (currentData) => {
+                    if (currentData === null) {
+                        return {
+                            createdAt: new Date().toISOString(),
+                            lastMessage: null,
+                            participants: {
+                                [buyerId]: true,
+                                [sellerId]: true
+                            }
+                        };
+                    }
+                    return currentData;
                 });
-
-                await update(ref(db), {
+    
+                const userConversationUpdates = {
                     [`userConversations/${buyerId}/${conversationId}`]: {
                         otherUserEmail: sellerEmail,
                         otherUserId: sellerId,
@@ -155,16 +158,23 @@ const ProductPage = () => {
                         otherUserId: buyerId,
                         lastRead: new Date().toISOString()
                     }
-                });
+                };
+    
+                await update(ref(db), userConversationUpdates);
+    
+                localStorage.setItem('currentConversationId', conversationId);
+    
+                navigate("/messages");
+    
+            } catch (firebaseError) {
+                console.error('Error creating conversation:', firebaseError);
+                setNotificationMessage("Failed to create conversation. Please try again.");
+                setShowNotification(true);
             }
-
-            localStorage.setItem('currentConversationId', conversationId);
-            localStorage.setItem('currentProductId', product.id);
-
-            navigate("/messages");
+    
         } catch (error) {
-            console.error("Error opening chat:", error);
-            setNotificationMessage("An error occurred. Please try again later.");
+            console.error('Error in handleMessageClick:', error);
+            setNotificationMessage("An unexpected error occurred. Please try again.");
             setShowNotification(true);
         }
     };

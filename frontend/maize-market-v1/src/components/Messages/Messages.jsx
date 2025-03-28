@@ -36,7 +36,6 @@ const Messages = () => {
 
     useEffect(() => {
         if (!user) return;
-
         const userConversationsRef = ref(db, `userConversations/${user.uid}`);
 
         onValue(userConversationsRef, async (snapshot) => {
@@ -82,7 +81,6 @@ const Messages = () => {
                             setActiveConversationId(storedConversationId);
                             setActiveChat(conversationToActivate);
                             setSelectedUserEmail(conversationToActivate.otherUserEmail);
-                            localStorage.removeItem('currentConversationId');
                         }
                     }
                 } else {
@@ -165,6 +163,7 @@ const Messages = () => {
             await set(newMessageRef, messageData);
 
             const conversationRef = ref(db, `conversations/${activeConversationId}`);
+            
             await set(conversationRef, {
                 lastMessage: text,
                 lastMessageTime: serverTimestamp(),
@@ -216,9 +215,8 @@ const Messages = () => {
             setNotificationMessage(error.message);
             setNotificationVisible(true);
         }
-        console.log('Conversation ID' + activeConversationId);
-        console.log('Current User ID' + currentUserId);
-        console.log('Other User ID' + otherUserId);
+        setActiveConversationId(null);
+        setActiveChat(null);
     }
 
     return (
