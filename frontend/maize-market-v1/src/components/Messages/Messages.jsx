@@ -91,7 +91,7 @@ const Messages = () => {
                 showNotification("Error loading conversations");
             }
         });
-    }, [user]);
+    }, [user, messages]);
 
     useEffect(() => {
         if (!activeConversationId) return;
@@ -163,7 +163,7 @@ const Messages = () => {
             await set(newMessageRef, messageData);
 
             const conversationRef = ref(db, `conversations/${activeConversationId}`);
-            
+
             await set(conversationRef, {
                 lastMessage: text,
                 lastMessageTime: serverTimestamp(),
