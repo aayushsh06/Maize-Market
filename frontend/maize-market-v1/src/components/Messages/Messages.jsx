@@ -231,7 +231,7 @@ const Messages = () => {
 
             {deleteModal ? 
             <div className='confirm'>
-                <p>Deleting Will Permenantly Delete All Messages</p>
+                <p>Deleting conversation will permenantly delete all messages</p>
                 <div className='options'>
                     <button onClick={() => setDeleteModal(false)}>Cancel</button>
                     <button onClick={() => {
