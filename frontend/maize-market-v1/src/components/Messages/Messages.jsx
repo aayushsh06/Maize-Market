@@ -144,6 +144,7 @@ const Messages = () => {
         setActiveConversationId(conversation.id);
         setActiveChat(conversation);
         setSelectedUserEmail(conversation.otherUserEmail);
+        localStorage.setItem('currentConversationId', conversation.id);
     };
 
     const sendMessage = async (text) => {
