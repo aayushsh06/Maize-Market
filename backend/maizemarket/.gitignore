@@ -31,3 +31,22 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore local and production environment configuration files
+application-local.properties
+application-prod.properties
+
+# Ignore environment variable files (if used)
+.env
+*.env
+
+# Ignore logs and temp files
+logs/
+*.log
+nohup.out
+
+# Ignore Maven and IntelliJ IDEA/VS Code files (if applicable)
+target/
+*.iml
+.idea/
+.vscode/
