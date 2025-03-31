@@ -35,6 +35,7 @@ build/
 # Ignore local and production environment configuration files
 application-local.properties
 application-prod.properties
+application.properties
 
 # Ignore environment variable files (if used)
 .env
